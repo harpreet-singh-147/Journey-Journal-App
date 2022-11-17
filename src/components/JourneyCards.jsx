@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useTheme, Button, Card, Title, Paragraph } from "react-native-paper";
 import useCollection from "../../utils/hooks/useCollection";
+import { getAuth } from "firebase/auth";
 
 const Item = ({ city, title, date }) => (
 	<View style={styles.item}>
@@ -34,8 +35,15 @@ const Item = ({ city, title, date }) => (
 );
 
 const JourneyCards = () => {
-	const { documents: trips } = useCollection("Journ");
-	console.log("documents: ", trips);
+	const auth = getAuth();
+	const user = auth.currentUser;
+
+	const { documents: trips } = useCollection("Journey", [
+		"uid",
+		"==",
+		user.uid,
+	]);
+
 	const renderItem = ({ item }) => (
 		<Item
 			city={item.city}

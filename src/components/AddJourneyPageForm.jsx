@@ -1,42 +1,41 @@
 import { useState, useEffect } from "react";
 import { TextInput } from "react-native-paper";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Platform } from "react-native";
 import { useTheme, Button } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { collection, addDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { db } from "../config/firebaseConfig";
+import { useAuthentication } from "../../utils/hooks/userAuthentication";
 import useCollection from "../../utils/hooks/useCollection";
 
 const AddJourneyPageForm = () => {
+	const auth = getAuth();
+	const user = auth.currentUser;
+
 	const [journeyTitle, setJourneyTitle] = useState("");
 	const [city, setCity] = useState("");
 	const [date, setDate] = useState(new Date());
 	const [mode, setMode] = useState("date");
 	const [show, setShow] = useState(false);
 	const [img, setImg] = useState("");
-	const { documents: trips } = useCollection("Journ");
-	console.log("documents: ", trips);
+	const { documents: trips } = useCollection("Journey");
 
 	const onChange = (event, selectedDate) => {
 		const currentDate = selectedDate;
-		setShow(false);
+		setShow(Platform.OS === "ios");
 		setDate(currentDate);
 	};
 
 	const showMode = (currentMode) => {
-		setShow(false);
-		// for iOS, add a button that closes the picker
-
+		setShow(true);
 		setMode(currentMode);
 	};
 
-	const showDatepicker = () => {
-		showMode("date");
-	};
-
 	const handleSubmit = async (e) => {
-		const reference = collection(db, "Journ");
+		const reference = collection(db, "Journey");
 		const tripObject = {
+			uid: user.uid,
 			journey_title: journeyTitle,
 			city: city,
 			date: date,
@@ -63,32 +62,36 @@ const AddJourneyPageForm = () => {
 					onChangeText={(text) => setCity(text)}
 				/>
 			</View>
+
+			<View>
+				<Button
+					style={{ marginTop: 10 }}
+					mode="contained"
+					onPress={() => showMode("date")}
+				>
+					Select Date
+				</Button>
+			</View>
 			<View style={styles.date}>
-				<View>
-					<Text>selected: {date.toLocaleString()}</Text>
-					{
-						<DateTimePicker
-							onPress={showDatepicker}
-							testID="dateTimePicker"
-							value={date}
-							mode={mode}
-							is24Hour={true}
-							onChange={onChange}
-						/>
-					}
-				</View>
+				{show && (
+					<DateTimePicker
+						testID="dateTimePicker"
+						value={date}
+						mode={mode}
+						is24Hour={true}
+						onChange={onChange}
+					/>
+				)}
 			</View>
 			<View>
 				<Button mode="contained" onPress={handleSubmit}>
-					Press me
+					Add
 				</Button>
 			</View>
 		</View>
 	);
 };
-
 export default AddJourneyPageForm;
-
 const styles = StyleSheet.create({
 	container: {
 		padding: 20,
