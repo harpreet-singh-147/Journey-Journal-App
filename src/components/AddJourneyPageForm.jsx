@@ -68,6 +68,7 @@ const AddJourneyPageForm = () => {
 					<Text>selected: {date.toLocaleString()}</Text>
 					{
 						<DateTimePicker
+							onPress={showDatepicker}
 							testID="dateTimePicker"
 							value={date}
 							mode={mode}

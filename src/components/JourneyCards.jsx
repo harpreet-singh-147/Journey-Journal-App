@@ -12,14 +12,13 @@ import {
 import { useTheme, Button, Card, Title, Paragraph } from "react-native-paper";
 import useCollection from "../../utils/hooks/useCollection";
 
-const Item = ({ city, title }) => (
+const Item = ({ city, title, date }) => (
 	<View style={styles.item}>
-		{/* <Text style={styles.city}>{city}</Text>
-		<Text style={styles.city}>{title}</Text> */}
 		<Card style={styles.card}>
 			<Card.Content>
 				<Title>{city}</Title>
 				<Paragraph>{title}</Paragraph>
+				<Paragraph>{new Date(date * 1000).toDateString()}</Paragraph>
 			</Card.Content>
 			<Card.Cover
 				source={{
@@ -38,7 +37,11 @@ const JourneyCards = () => {
 	const { documents: trips } = useCollection("Journ");
 	console.log("documents: ", trips);
 	const renderItem = ({ item }) => (
-		<Item city={item.city} title={item.journey_title} />
+		<Item
+			city={item.city}
+			title={item.journey_title}
+			date={item.date.seconds}
+		/>
 	);
 
 	return (
