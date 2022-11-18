@@ -14,7 +14,7 @@ import useCollection from "../../utils/hooks/useCollection";
 import { getAuth } from "firebase/auth";
 
 const JourneyCards = ({ navigation }) => {
-  console.log("navigation: inside JOURNEY CARDS COMPONENT", navigation);
+  //   console.log("navigation: inside JOURNEY CARDS COMPONENT", navigation);
   const auth = getAuth();
   const user = auth.currentUser;
 

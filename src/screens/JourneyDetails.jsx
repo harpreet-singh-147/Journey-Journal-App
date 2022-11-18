@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import useCollection from "../../utils/hooks/useCollection";
 import { getAuth } from "firebase/auth";
-
+import { useNavigation } from "@react-navigation/native";
 import {
   useTheme,
   Button,
@@ -24,10 +24,11 @@ const JourneyDetails = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const auth = getAuth();
   const user = auth.currentUser;
+  const navigation = useNavigation();
 
   const { documents: accoms } = useCollection("Accommodation");
-
-  console.log(accoms);
+  const { documents: eatDrink } = useCollection("Catering");
+  console.log(eatDrink);
 
   const Item = ({ address, name, descriptiion }) => (
     <View style={styles.item}>
@@ -45,7 +46,7 @@ const JourneyDetails = () => {
         <Card.Actions>
           <Button
             onPress={() => {
-              navigation.navigate("JourneyDetails");
+              navigation.navigate("detailsForm");
             }}
           >
             Journey Details
