@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 
 const JourneyList = () => {
 	const navigation = useNavigation();
-	console.log('navigation: ', navigation);
 	return <JourneyCards navigation={navigation}></JourneyCards>;
 };
 

@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import geopifyApi from './utils/api'
 
 export default {
   "extra": {
@@ -7,6 +8,7 @@ export default {
     firebaseProjectId: process.env.FIREBASE_PROJECT_ID,
     firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     firebaseMessagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    firebaseAppId: process.env.FIREBASE_APP_ID
+    firebaseAppId: process.env.FIREBASE_APP_ID,
+    geopifyApiKey: process.env.GEOPIFY_API_KEY
   }
 }
