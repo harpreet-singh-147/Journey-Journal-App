@@ -21,22 +21,27 @@ import {
 } from "react-native-paper";
 
 const JourneyDetails = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const auth = getAuth();
-  const user = auth.currentUser;
+  const [accomsModalVisible, setaccomsModalVisible] = useState(false);
+  const [eatDrinkModal, setEatDrinkModal] = useState(false);
+  const [attractionsModal, setAttractionsModal] = useState(false);
+
   const navigation = useNavigation();
 
   const { documents: accoms } = useCollection("Accommodation");
-  const { documents: eatDrink } = useCollection("Catering");
-  console.log(eatDrink);
 
-  const Item = ({ address, name, descriptiion }) => (
+  const { documents: eatDrink } = useCollection("Catering");
+  const { documents: attractions } = useCollection("Attractions");
+  //   console.log(eatDrink);
+
+  const Item = ({ address, name, description, rating, test }) => (
     <View style={styles.item}>
       <Card style={styles.card}>
         <Card.Content>
           <Title>{address}</Title>
           <Paragraph>{name}</Paragraph>
-          <Paragraph>{descriptiion}</Paragraph>
+          <Paragraph>{description}</Paragraph>
+          <Paragraph>{rating}</Paragraph>
+          <Paragraph>{test}</Paragraph>
         </Card.Content>
         <Card.Cover
           source={{
@@ -49,34 +54,62 @@ const JourneyDetails = () => {
               navigation.navigate("detailsForm");
             }}
           >
-            Journey Details
+            Add Details
           </Button>
         </Card.Actions>
       </Card>
     </View>
   );
 
-  const renderItem = ({ item }) => (
+  const renderItemAccoms = ({ item }) => (
     <Item
       address={item.address}
       name={item.name}
-      descriptiion={item.descriptiion}
+      description={item.description}
+      rating={item.rating}
+      test={item.test}
     />
   );
 
   return (
     <View style={styles.container}>
       <View>
-        <Modal visible={modalVisible} animationType="slide">
-          <Button onPress={() => setModalVisible(false)}>Close</Button>
+        <Modal visible={accomsModalVisible} animationType="slide">
+          <Button onPress={() => setaccomsModalVisible(false)}>Close</Button>
           <FlatList
             data={accoms}
-            renderItem={renderItem}
+            renderItem={renderItemAccoms}
             keyExtractor={(item) => item.id}
           />
         </Modal>
 
-        <Button onPress={() => setModalVisible(true)}>Accomodation</Button>
+        <Button onPress={() => setaccomsModalVisible(true)}>
+          Accomodation
+        </Button>
+      </View>
+      <View>
+        <Modal visible={eatDrinkModal} animationType="slide">
+          <Button onPress={() => setEatDrinkModal(false)}>Close</Button>
+          <FlatList
+            data={eatDrink}
+            renderItem={renderItemAccoms}
+            keyExtractor={(item) => item.id}
+          />
+        </Modal>
+
+        <Button onPress={() => setEatDrinkModal(true)}>EatDrink</Button>
+      </View>
+      <View>
+        <Modal visible={attractionsModal} animationType="slide">
+          <Button onPress={() => setAttractionsModal(false)}>Close</Button>
+          <FlatList
+            data={attractions}
+            renderItem={renderItemAccoms}
+            keyExtractor={(item) => item.id}
+          />
+        </Modal>
+
+        <Button onPress={() => setAttractionsModal(true)}>Attractions</Button>
       </View>
       {/* <View>
         <Modal
