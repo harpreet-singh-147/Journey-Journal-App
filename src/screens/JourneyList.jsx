@@ -1,9 +1,12 @@
 import React from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
 import JourneyCards from "../components/JourneyCards";
+import { useNavigation } from "@react-navigation/native";
 
 const JourneyList = () => {
-	return <JourneyCards></JourneyCards>;
+	const navigation = useNavigation();
+	console.log('navigation: ', navigation);
+	return <JourneyCards navigation={navigation}></JourneyCards>;
 };
 
 const styles = StyleSheet.create({

@@ -13,30 +13,38 @@ import { useTheme, Button, Card, Title, Paragraph } from "react-native-paper";
 import useCollection from "../../utils/hooks/useCollection";
 import { getAuth } from "firebase/auth";
 
-const Item = ({ city, title, date }) => (
-	<View style={styles.item}>
-		<Card style={styles.card}>
-			<Card.Content>
-				<Title>{city}</Title>
-				<Paragraph>{title}</Paragraph>
-				<Paragraph>{new Date(date * 1000).toDateString()}</Paragraph>
-			</Card.Content>
-			<Card.Cover
-				source={{
-					uri: "https://picsum.photos/700",
-				}}
-			/>
-			<Card.Actions>
-				<Button>Cancel</Button>
-				<Button>Ok</Button>
-			</Card.Actions>
-		</Card>
-	</View>
-);
-
-const JourneyCards = () => {
+const JourneyCards = ({ navigation }) => {
+	console.log("navigation: inside JOURNEY CARDS COMPONENT", navigation);
 	const auth = getAuth();
 	const user = auth.currentUser;
+
+	const Item = ({ city, title, date }) => (
+		<View style={styles.item}>
+			<Card style={styles.card}>
+				<Card.Content>
+					<Title>{city}</Title>
+					<Paragraph>{title}</Paragraph>
+					<Paragraph>
+						{new Date(date * 1000).toDateString()}
+					</Paragraph>
+				</Card.Content>
+				<Card.Cover
+					source={{
+						uri: "https://picsum.photos/700",
+					}}
+				/>
+				<Card.Actions>
+					<Button
+						onPress={() => {
+							navigation.navigate("JourneyDetails");
+						}}
+					>
+						Journey Details
+					</Button>
+				</Card.Actions>
+			</Card>
+		</View>
+	);
 
 	const { documents: trips } = useCollection("Journey", [
 		"uid",
