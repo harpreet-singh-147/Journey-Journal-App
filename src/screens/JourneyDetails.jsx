@@ -28,7 +28,6 @@ const JourneyDetails = () => {
   const navigation = useNavigation();
 
   const { documents: accoms } = useCollection("Accommodation");
-
   const { documents: eatDrink } = useCollection("Catering");
   const { documents: attractions } = useCollection("Attractions");
   //   console.log(eatDrink);

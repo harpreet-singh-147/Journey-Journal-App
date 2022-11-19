@@ -1,120 +1,146 @@
 import { useState, useEffect } from "react";
-import { TextInput } from "react-native-paper";
-import { Text, View, StyleSheet, Platform } from "react-native";
-import { useTheme, Button } from "react-native-paper";
+// import {  } from "react-native-paper";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { TextInput, Button } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { collection, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../config/firebaseConfig";
 import { useAuthentication } from "../../utils/hooks/userAuthentication";
 import useCollection from "../../utils/hooks/useCollection";
+import { Formik } from "formik";
+import * as yup from "yup";
+
+const addJourneyValidationSchema = yup.object({
+  journey_title: yup.string().required("please enter a journey"),
+  city: yup.string().required("please enter a city"),
+});
 
 const AddJourneyPageForm = () => {
-	const auth = getAuth();
-	const user = auth.currentUser;
+  const auth = getAuth();
+  const user = auth.currentUser;
 
-	const [journeyTitle, setJourneyTitle] = useState("");
-	const [city, setCity] = useState("");
-	const [date, setDate] = useState(new Date());
-	const [mode, setMode] = useState("date");
-	const [show, setShow] = useState(false);
-	const [img, setImg] = useState("");
-	const { documents: trips } = useCollection("Journey");
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [img, setImg] = useState("");
 
-	const onChange = (event, selectedDate) => {
-		const currentDate = selectedDate;
-		setShow(Platform.OS === "ios");
-		setDate(currentDate);
-	};
+  const addDetails = async (details) => {
+    details.uid = user.uid;
+    details.date = date;
+    const reference = collection(db, "Journey");
+    await addDoc(reference, details);
+    console.log(details);
+  };
 
-	const showMode = (currentMode) => {
-		setShow(true);
-		setMode(currentMode);
-	};
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
 
-	const handleSubmit = async (e) => {
-		const reference = collection(db, "Journey");
-		const tripObject = {
-			uid: user.uid,
-			journey_title: journeyTitle,
-			city: city,
-			date: date,
-		};
-		await addDoc(reference, tripObject);
-		setJourneyTitle("");
-		setCity("");
-	};
-	return (
-		<View style={styles.container}>
-			<View style={styles.accomodationInput}>
-				<TextInput
-					style={{ marginTop: 50 }}
-					label="Add journey title"
-					value={journeyTitle}
-					onChangeText={(text) => setJourneyTitle(text)}
-				/>
-			</View>
-			<View style={styles.addressInput}>
-				<TextInput
-					style={{ marginTop: 10 }}
-					label="City"
-					value={city}
-					onChangeText={(text) => setCity(text)}
-				/>
-			</View>
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
 
-			<View>
-				<Button
-					style={{ marginTop: 10 }}
-					mode="contained"
-					onPress={() => showMode("date")}
-				>
-					Select Date
-				</Button>
-			</View>
-			<View style={styles.date}>
-				{show && (
-					<DateTimePicker
-						testID="dateTimePicker"
-						value={date}
-						mode={mode}
-						is24Hour={true}
-						onChange={onChange}
-					/>
-				)}
-			</View>
-			<View>
-				<Button mode="contained" onPress={handleSubmit}>
-					Add
-				</Button>
-			</View>
-		</View>
-	);
+  return (
+    <View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ padding: 25 }}>
+          <Formik
+            initialValues={{
+              journey_title: "",
+              city: "",
+            }}
+            validationSchema={addJourneyValidationSchema}
+            onSubmit={(values, actions) => {
+              addDetails(values);
+              actions.resetForm();
+            }}
+          >
+            {(props) => (
+              <View>
+                <TextInput
+                  placeholder="Add journey title"
+                  onChangeText={props.handleChange("journey_title")}
+                  value={props.values.journey_title}
+                  onBlur={props.handleBlur("journey_title")}
+                />
+                <Text style={styles.errorText}>
+                  {props.touched.journey_title && props.errors.journey_title}
+                </Text>
+                <TextInput
+                  placeholder="Add city"
+                  onChangeText={props.handleChange("city")}
+                  value={props.values.city}
+                  onBlur={props.handleBlur("city")}
+                />
+                <Text style={styles.errorText}>
+                  {props.touched.city && props.errors.city}
+                </Text>
+                <View>
+                  <Button
+                    style={{ marginTop: 10 }}
+                    mode="contained"
+                    onPress={() => showMode("date")}
+                  >
+                    Select Date
+                  </Button>
+                </View>
+                <View>
+                  {show && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={date}
+                      mode={mode}
+                      is24Hour={true}
+                      onChange={onChange}
+                    />
+                  )}
+                </View>
+
+                <Button
+                  style={{ marginTop: 10 }}
+                  mode="contained"
+                  onPress={props.handleSubmit}
+                >
+                  Submit
+                </Button>
+              </View>
+            )}
+          </Formik>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
+  );
 };
 export default AddJourneyPageForm;
 const styles = StyleSheet.create({
-	container: {
-		padding: 20,
-		marginTop: 50,
-		flex: 1,
-		backgroundColor: "gray",
-	},
-	accomodationInput: {
-		paddingLeft: 10,
-		paddingRight: 10,
-	},
-	ratingInput: {
-		paddingLeft: 10,
-		paddingRight: 10,
-	},
-	addressInput: {
-		paddingLeft: 10,
-		paddingRight: 10,
-	},
-	date: {
-		backgroundColor: "red",
-		margin: 20,
-		padding: 20,
-		alignItems: "center",
-	},
+  container: {
+    // padding: 20,
+    // // marginTop: 50,
+    // flex: 1,
+    // backgroundColor: "gray",
+  },
+  errorText: {
+    color: "crimson",
+    fontWeight: "bold",
+    marginBottom: 6,
+    marginTop: 6,
+    textAlign: "center",
+  },
+  date: {
+    // backgroundColor: "red",
+    // margin: 20,
+    // padding: 20,
+    // alignItems: "center",
+  },
 });

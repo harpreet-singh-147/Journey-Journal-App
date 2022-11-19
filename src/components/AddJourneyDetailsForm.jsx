@@ -298,14 +298,11 @@ export default function AddJourneyDetailsForm() {
                     style={{ marginTop: 10 }}
                     mode="contained"
                     onPress={() => showMode("date")}
-                    // placeholder="date"
-                    // onChangeText={props.handleChange("date")}
-                    // value={props.values.date}
                   >
                     Select Date
                   </Button>
                 </View>
-                <View style={styles.date}>
+                <View>
                   {show && (
                     <DateTimePicker
                       testID="dateTimePicker"
