@@ -170,12 +170,40 @@ import { View, Text, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik } from "formik";
 import { useTheme, Button, TextInput } from "react-native-paper";
+import { Picker } from "@react-native-picker/picker";
+import { collection, addDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { db } from "../config/firebaseConfig";
+import { useAuthentication } from "../../utils/hooks/userAuthentication";
+import useCollection from "../../utils/hooks/useCollection";
 
 export default function AddJourneyDetailsForm() {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  console.log(date);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  //   console.log(selectedCategory);
+  //     console.log(date);
+
+  //   const reference = collection(db, "Accommdation");
+  //   const addDetails = {
+  //     uid: user.uid,
+  //     description: description,
+  //     city: city,
+  //     date: date,
+  //     rating: rating,
+  //     address: address,
+  //     name: name,
+  //   };
+  //   await addDoc(reference, addDetails);
+  // };
+
+  const addDetails = async (details) => {
+    details.date = date;
+    const reference = collection(db, selectedCategory);
+    await addDoc(reference, details);
+    console.log(details);
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -190,15 +218,15 @@ export default function AddJourneyDetailsForm() {
   return (
     <View>
       <Formik
+        enableReinitialize
         initialValues={{
           name: "",
           description: "",
           rating: "",
           address: "",
           city: "",
-          date: date,
         }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => addDetails(values)}
       >
         {(props) => (
           <View>
@@ -251,7 +279,16 @@ export default function AddJourneyDetailsForm() {
                 />
               )}
             </View>
-
+            <Picker
+              selectedValue={selectedCategory}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedCategory(itemValue)
+              }
+            >
+              <Picker.Item label="Accommodation" value="Accommodation" />
+              <Picker.Item label="Catering" value="Catering" />
+              <Picker.Item label="Attractions" value="Attractions" />
+            </Picker>
             <Button onPress={props.handleSubmit}>Submit</Button>
           </View>
         )}
