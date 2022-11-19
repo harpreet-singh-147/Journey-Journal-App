@@ -8,46 +8,46 @@ const auth = getAuth();
 
 const user = auth.currentUser;
 if (user !== null) {
-	console.log(user.uid);
-	console.log(user.displayName);
-	console.log(user.email);
+  console.log(user.uid);
+  console.log(user.displayName);
+  console.log(user.email);
 }
 
 export default function HomeScreen() {
-	const { user } = useAuthentication();
-	const [signOutIsLoadingBtn, setSignOutIsLoadingBtn] = useState(false);
+  const { user } = useAuthentication();
+  const [signOutIsLoadingBtn, setSignOutIsLoadingBtn] = useState(false);
 
-	function signOutBtnFuncCombine() {
-		setSignOutIsLoadingBtn(true);
-		signOut(auth);
-	}
+  function signOutBtnFuncCombine() {
+    setSignOutIsLoadingBtn(true);
+    signOut(auth);
+  }
 
-	return (
-		<View style={styles.container}>
-			<Text>Welcome {user?.email}!</Text>
+  return (
+    <View style={styles.container}>
+      <Text>Welcome {user?.displayName}!</Text>
 
-			<Button
-				style={styles.button}
-				onPress={() => signOutBtnFuncCombine()}
-				icon="arrow-right"
-				mode="contained"
-				contentStyle={{ height: 50, flexDirection: "row-reverse" }}
-				loading={signOutIsLoadingBtn}
-			>
-				Sign Out
-			</Button>
-		</View>
-	);
+      <Button
+        style={styles.button}
+        onPress={() => signOutBtnFuncCombine()}
+        icon="arrow-right"
+        mode="contained"
+        contentStyle={{ height: 50, flexDirection: "row-reverse" }}
+        loading={signOutIsLoadingBtn}
+      >
+        Sign Out
+      </Button>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	button: {
-		marginTop: 10,
-	},
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    marginTop: 10,
+  },
 });
