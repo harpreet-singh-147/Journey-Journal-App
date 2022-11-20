@@ -19,20 +19,48 @@ import {
   Paragraph,
   Portal,
 } from "react-native-paper";
+import { deleteDoc, doc } from "firebase/firestore";
+//Importing DB
+import { db } from "../config/firebaseConfig";
 
-const JourneyDetails = () => {
+const JourneyDetails = ({ route }) => {
+  const { id } = route.params;
+  console.log("Route Params:", route.params);
+  console.log("JJ ID:", id);
   const [accomsModalVisible, setaccomsModalVisible] = useState(false);
   const [eatDrinkModal, setEatDrinkModal] = useState(false);
   const [attractionsModal, setAttractionsModal] = useState(false);
 
   const navigation = useNavigation();
 
-  const { documents: accoms } = useCollection("Accommodation");
-  const { documents: eatDrink } = useCollection("Catering");
-  const { documents: attractions } = useCollection("Attractions");
+  const { documents: accoms } = useCollection("Accommodation", [
+    "journey_id",
+    "==",
+    id,
+  ]);
+  const { documents: eatDrink } = useCollection("Catering", [
+    "journey_id",
+    "==",
+    id,
+  ]);
+  const { documents: attractions } = useCollection("Attractions", [
+    "journey_id",
+    "==",
+    id,
+  ]);
   //   console.log(eatDrink);
+  const handleDelete = async (id) => {
+    console.log("deleted", id);
 
-  const Item = ({ address, name, description, rating, test }) => (
+    //Deletion Logic
+    try {
+      await deleteDoc(doc(db, "Accommodation", id));
+    } catch (err) {
+      console.log("Error:", err.message);
+    }
+  };
+
+  const Item = ({ id, address, name, description, rating, test }) => (
     <View style={styles.item}>
       <Card style={styles.card}>
         <Card.Content>
@@ -50,10 +78,20 @@ const JourneyDetails = () => {
         <Card.Actions>
           <Button
             onPress={() => {
-              navigation.navigate("detailsForm");
+              setaccomsModalVisible(false);
+              setEatDrinkModal(false);
+              setAttractionsModal(false);
             }}
           >
-            Add Details
+            Back
+          </Button>
+          <Button>Edit</Button>
+          <Button
+            onPress={() => {
+              handleDelete(id);
+            }}
+          >
+            Delete
           </Button>
         </Card.Actions>
       </Card>
@@ -67,6 +105,7 @@ const JourneyDetails = () => {
       description={item.description}
       rating={item.rating}
       test={item.test}
+      id={item.id}
     />
   );
 
@@ -74,16 +113,32 @@ const JourneyDetails = () => {
     <View style={styles.container}>
       <View>
         <Modal visible={accomsModalVisible} animationType="slide">
-          <Button onPress={() => setaccomsModalVisible(false)}>Close</Button>
+          <View>
+            <Button onPress={() => setaccomsModalVisible(false)}>
+              <Text>Close</Text>
+            </Button>
+          </View>
+
           <FlatList
             data={accoms}
             renderItem={renderItemAccoms}
             keyExtractor={(item) => item.id}
           />
+
+          <View>
+            <Button
+              onPress={() => {
+                setaccomsModalVisible(false);
+                navigation.navigate("detailsForm", { id: id });
+              }}
+            >
+              <Text>Add Accommodation</Text>
+            </Button>
+          </View>
         </Modal>
 
         <Button onPress={() => setaccomsModalVisible(true)}>
-          Accomodation
+          <Text>Accomodation</Text>
         </Button>
       </View>
       <View>
@@ -94,6 +149,16 @@ const JourneyDetails = () => {
             renderItem={renderItemAccoms}
             keyExtractor={(item) => item.id}
           />
+          <View>
+            <Button
+              onPress={() => {
+                setEatDrinkModal(false);
+                navigation.navigate("detailsForm", { id: id });
+              }}
+            >
+              <Text>Add EatDrink</Text>
+            </Button>
+          </View>
         </Modal>
 
         <Button onPress={() => setEatDrinkModal(true)}>EatDrink</Button>
@@ -106,49 +171,33 @@ const JourneyDetails = () => {
             renderItem={renderItemAccoms}
             keyExtractor={(item) => item.id}
           />
+          <View>
+            <Button
+              onPress={() => {
+                setAttractionsModal(false);
+                navigation.navigate("detailsForm", { id: id });
+              }}
+            >
+              <Text>Add Attractions</Text>
+            </Button>
+          </View>
         </Modal>
 
         <Button onPress={() => setAttractionsModal(true)}>Attractions</Button>
       </View>
-      {/* <View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.textStyle}>accomodation</Text>
-        </Pressable>
-      </View> */}
+      {/* <Button onPress={() => navigation.navigate("JourneyList")}>
+        JourneyList
+      </Button> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    // flexDirection: "row",
+    // flex: 1,
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   centeredView: {
     justifyContent: "center",
@@ -322,6 +371,38 @@ export default JourneyDetails;
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.textStyle}>Attraction</Text>
+        </Pressable>
+      </View> */
+}
+
+{
+  /* <View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Hello World!</Text>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+        <Pressable
+          style={[styles.button, styles.buttonOpen]}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.textStyle}>accomodation</Text>
         </Pressable>
       </View> */
 }

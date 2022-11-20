@@ -195,7 +195,9 @@ const addDetailsValidationSchema = yup.object({
   city: yup.string().required(),
 });
 
-export default function AddJourneyDetailsForm() {
+export default function AddJourneyDetailsForm({ route, navigation }) {
+  const { id } = route.params;
+  console.log("JourneyID:", id);
   const auth = getAuth();
   const user = auth.currentUser;
   const [date, setDate] = useState(new Date());
@@ -208,12 +210,19 @@ export default function AddJourneyDetailsForm() {
   const addDetails = async (details) => {
     details.uid = user.uid;
     details.date = date;
+
+    //Adding ID to the details
+    details.journey_id = id;
+
     const reference = selectedCategory
       ? collection(db, selectedCategory)
       : alert("please select category");
     await addDoc(reference, details);
     setSelectedCategory("");
     console.log(details);
+
+    //redirect to the Journey Page
+    navigation.navigate("JourneyList");
   };
 
   const onChange = (event, selectedDate) => {
@@ -231,7 +240,7 @@ export default function AddJourneyDetailsForm() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ padding: 25 }}>
           <Formik
-            enableReinitialize
+            // enableReinitialize
             initialValues={{
               name: "",
               description: "",
@@ -319,6 +328,7 @@ export default function AddJourneyDetailsForm() {
                     setSelectedCategory(itemValue)
                   }
                 >
+                  <Picker.Item label="Please select category" />
                   <Picker.Item label="Accommodation" value="Accommodation" />
                   <Picker.Item label="Catering" value="Catering" />
                   <Picker.Item label="Attractions" value="Attractions" />
