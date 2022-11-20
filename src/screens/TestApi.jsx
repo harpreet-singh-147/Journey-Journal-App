@@ -2,14 +2,14 @@
 // import React, { useState, useEffect } from "react";
 // import { View, StyleSheet, Text, Button } from "react-native";
 // import { SafeAreaView } from "react-native-safe-area-context";
-// import { fetchCatering } from "../../utils/api";
 
 import React, { useState, useEffect, useRef } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
-import { Button } from "react-native-paper";
+import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
+import { Button, TextInput } from "react-native-paper";
 import * as Location from "expo-location";
 import customMapStyle from "../mapStyle.json";
+import { fetchCatering } from "../../utils/api";
 
 function TestApi() {
   const mapRef = useRef(null);
@@ -26,6 +26,10 @@ function TestApi() {
   const [currLocation, setCurrLocationRegion] = useState(null);
 
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const [dataJSON, setDataJSON] = useState(null)
+
+  const journeyLocation = "skegness"
 
   function userLocation() {
     setIsLoading(true);
@@ -49,8 +53,12 @@ function TestApi() {
     })();
   }
 
+  function findCateryServices(){
+    fetchCatering(journeyLocation).then(({features}) => {
+      setDataJSON(features)
+    })
+  }
   
-
   const goToLocation = () => {
     //Animate the user to new region. Complete this animation in 3 seconds
     userLocation()
@@ -59,31 +67,49 @@ function TestApi() {
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        initialRegion={location}
-        customMapStyle={customMapStyle}
-        ref={mapRef}
-        provider="google"
-        showsUserLocation={true}
-      >
-        {/* <Marker title="Marker">
-          <Callout>
-            <Text>Location</Text>
-          </Callout>
-        </Marker> */}
-      </MapView>
-      <Button
-        style={styles.button}
-        isLoading={true}
-        onPress={() => goToLocation()}
-        icon="arrow-right"
-				mode="contained"
-				contentStyle={{ height: 50, flexDirection: "row-reverse" }}
-				loading={isLoading}
-      >
-        Get Current Location
-      </Button>
+      <ScrollView>
+        <MapView
+          style={styles.map}
+          initialRegion={location}
+          customMapStyle={customMapStyle}
+          ref={mapRef}
+          provider="google"
+          showsUserLocation={true}
+        >
+          {/* <Marker title="Marker">
+            <Callout>
+              <Text>Location</Text>
+            </Callout>
+          </Marker> */}
+        </MapView>
+        <Button
+          style={styles.button}
+          isLoading={true}
+          onPress={() => goToLocation()}
+          icon="arrow-right"
+          mode="contained"
+          contentStyle={{ height: 50, flexDirection: "row-reverse" }}
+          loading={isLoading}
+        >
+          Get Current Location
+        </Button>
+        <Button
+          style={styles.button}
+          isLoading={true}
+          onPress={() => findCateryServices()}
+          mode="contained"
+          contentStyle={{ height: 50 }}
+        >
+          Catery
+        </Button>
+        <View>
+          <Text>{JSON.stringify(dataJSON, null, 2)}</Text>
+        </View>
+        {/* <Button
+          onPress={handleClickSearch}>
+          Find Location Api
+        </Button> */}
+      </ScrollView>
     </View>
   );
 }
@@ -92,25 +118,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "flex-end",
   },
   map: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    height: 300,
   },
 });
-
-// function TestApi() {
-//   // fetchCatering().then(({data}) => {
-//   //   console.log(data.features[0].properties);
-//   // })
-//   return (
-//     <SafeAreaView>
-//       <Text>Test Api</Text>
-//       <View></View>
-//     </SafeAreaView>
-//   );
-// }
 
 export default TestApi;
