@@ -3,17 +3,27 @@ import Constants from "expo-constants";
 
 const geopifyApiKey = Constants.manifest?.extra?.geopifyApiKey;
 
-export const autocompleteApi = axios.create({
+const autocompleteApi = axios.create({
+  baseURL: "https://api.geoapify.com/v1/geocode/",
   method: "get",
-  url: "https://api.geoapify.com/v1/geocode/autocomplete?text=",
-  headers: { "X-API-KEY": geopifyApiKey },
+  headers: {
+    "x-api-key": geopifyApiKey,
+  },
 });
 
-autocompleteApi
-  .get(`Moscow`)
-  .then((response) => {
-    console.log(response.data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+export function fetchAutoCompleteApi(cityValue) {
+  console.log(encodeURIComponent(cityValue));
+  return autocompleteApi
+    .get(
+      `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(cityValue)}`
+    )
+    .then(({ data }) => {
+      console.log('data: ', data.features);
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+export default autocompleteApi;
