@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { useAuthentication } from "../../utils/hooks/userAuthentication";
 import { Button } from "react-native-paper";
 import { getAuth, signOut } from "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
 
 const auth = getAuth();
 
@@ -14,6 +15,7 @@ if (user !== null) {
 }
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   const { user } = useAuthentication();
   const [signOutIsLoadingBtn, setSignOutIsLoadingBtn] = useState(false);
 
@@ -25,7 +27,16 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text>Welcome {user?.displayName}!</Text>
-
+      <Button
+        style={styles.button}
+        onPress={() => navigation.navigate("autocomplete")}
+        icon="arrow-right"
+        mode="contained"
+        contentStyle={{ height: 50, flexDirection: "row-reverse" }}
+        loading={signOutIsLoadingBtn}
+      >
+        Autocomplete
+      </Button>
       <Button
         style={styles.button}
         onPress={() => signOutBtnFuncCombine()}
