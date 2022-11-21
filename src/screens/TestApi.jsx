@@ -10,8 +10,14 @@ import { Button, TextInput } from "react-native-paper";
 import * as Location from "expo-location";
 import customMapStyle from "../mapStyle.json";
 import { fetchCatering } from "../../utils/api";
+import useCollection from "../../utils/hooks/useCollection";
+import { getAuth } from "firebase/auth";
+
+
 
 function TestApi() {
+  const auth = getAuth();
+	const user = auth.currentUser;
   const mapRef = useRef(null);
 
   const [location, setLocation] = useState({
@@ -28,8 +34,6 @@ function TestApi() {
   const [errorMsg, setErrorMsg] = useState(null);
 
   const [dataJSON, setDataJSON] = useState(null)
-
-  const journeyLocation = "skegness"
 
   function userLocation() {
     setIsLoading(true);
@@ -52,6 +56,15 @@ function TestApi() {
       });
     })();
   }
+
+  const { documents: journey } = useCollection("Journey", [
+    "uid",
+		"==",
+		user.uid,
+	]);
+  // console.log(journey[0].journey_title);
+
+  const journeyLocation = "51c6302768934f54c059ba8cf6d3da7d4540f00101f901b837720000000000c00208"
 
   function findCateryServices(){
     fetchCatering(journeyLocation).then(({features}) => {
