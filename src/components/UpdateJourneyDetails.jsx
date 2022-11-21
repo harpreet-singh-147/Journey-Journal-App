@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,10 +10,17 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik } from "formik";
 import { useTheme, Button, TextInput } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
-import { collection, addDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  getDocs,
+} from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../config/firebaseConfig";
 import * as yup from "yup";
+import useCollection from "../../utils/hooks/useCollection";
 
 const addDetailsValidationSchema = yup.object({
   name: yup.string().required(),
@@ -28,36 +35,47 @@ const addDetailsValidationSchema = yup.object({
   city: yup.string().required(),
 });
 
-export default function AddJourneyDetailsForm({ route, navigation }) {
-  const { id } = route.params;
-  //   console.log("AddJourneyDetailsForm.jsx JourneyID:", id);
-  const auth = getAuth();
-  const user = auth.currentUser;
+export default function UpdateJourneyDetails({ route }) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  console.log(selectedCategory, "<<<<< cat");
-  //     console.log(date);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    rating: "",
+    address: "",
+    city: "",
+  });
+  const [editAddress, setEditAddress] = useState("");
 
-  const addDetails = async (details) => {
-    details.uid = user.uid;
-    details.date = date;
+  const { id, category } = route.params;
+  console.log(id);
+  console.log("Category:", category, ", ID:", id);
 
-    //Adding ID to the details
-    details.journey_id = id;
+  //  ["id", "!=", id];
+  //   const { documents: categoryRequest } = useCollection(category);
+  //   const data = db.collection(category).where("id", "==", id);
+  //   const data = getDocs(db, category, id);
+  //, ["id", "==", id]
+  const { documents: attractions } = useCollection(category);
+  //   const info = attractions.forEach((item) => console.log(item));
+  console.log(attractions, "<<<<<<Attractions");
+  let requiredData;
+  //
 
-    const reference = selectedCategory
-      ? collection(db, selectedCategory)
-      : alert("please select category");
-    await addDoc(reference, details);
-    setSelectedCategory("");
-    console.log(details);
-
-    //redirect to the Journey Page
-    navigation.navigate("JourneyList");
+  const getData = () => {
+    console.log("Get Data");
+    attractions.forEach((item) => {
+      if (item["id"] == id) {
+        setFormData(item);
+        console.log("--------------------------------------------");
+        console.log(item.address);
+        console.log("--------------------------------------------");
+      }
+    });
   };
-
+  //   console.log(data1);
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(Platform.OS === "ios");
@@ -68,19 +86,29 @@ export default function AddJourneyDetailsForm({ route, navigation }) {
     setShow(true);
     setMode(currentMode);
   };
+
+  useEffect(() => {
+    console.log("UseEffect");
+    if (attractions) {
+      console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      getData();
+    }
+  }, []);
+
   return (
     <View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ padding: 25 }}>
           <Formik
-            // enableReinitialize
-            initialValues={{
-              name: "",
-              description: "",
-              rating: "",
-              address: "",
-              city: "",
-            }}
+            initialValues={formData}
+            enableReinitialize
+            // initialValues={{
+            //   name: formData.name,
+            //   description: "",
+            //   rating: "",
+            //   address: "",
+            //   city: "",
+            // }}
             validationSchema={addDetailsValidationSchema}
             onSubmit={(values, actions) => {
               addDetails(values);

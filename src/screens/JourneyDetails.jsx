@@ -21,7 +21,7 @@ import {
   Paragraph,
   Portal,
 } from "react-native-paper";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 
 const JourneyDetails = ({ route }) => {
@@ -62,6 +62,23 @@ const JourneyDetails = ({ route }) => {
     }
   };
 
+  // const handleEdit = async (id) => {
+  // let data = {
+  //   description: "TEsting update",
+  // };
+  // console.log("EDITIIGNGGG", id);
+  // const docRef = doc(db, "Accommodation", id);
+  // await updateDoc(docRef, data)
+  //   .then((docRef) => {
+  //     console.log(
+  //       "A New Document Field has been added to an existing document"
+  //     );
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+  // };
+
   const Item = ({ id, address, name, description, rating, test }) => (
     // console.log(id, "<<<<<< Accom ID");
     <View style={styles.item}>
@@ -90,7 +107,35 @@ const JourneyDetails = ({ route }) => {
           >
             Back
           </Button>
-          <Button>Edit</Button>
+          <Button
+            onPress={() => {
+              setaccomsModalVisible(false);
+              navigation.navigate("updateDetails", {
+                id: id,
+                category:
+                  accomsModalVisible === true
+                    ? "Accommodation"
+                    : eatDrinkModal === true
+                    ? "Catering"
+                    : attractionsModal === true
+                    ? "Attractions"
+                    : "",
+              });
+            }}
+          >
+            Edit
+          </Button>
+          {/* <Button
+            onPress={() => {
+              setaccomsModalVisible(false);
+              navigation.navigate("detailsForm", {
+                id: id,
+              });
+              handleEdit(id);
+            }}
+          >
+            Edit
+          </Button> */}
           <Button
             onPress={() => {
               handleDelete(id);
@@ -147,6 +192,7 @@ const JourneyDetails = ({ route }) => {
         <TouchableOpacity onPress={() => setaccomsModalVisible(true)}>
           <View style={styles.buttonOpacity}>
             <Text>Accomodation</Text>
+            {/*  */}
           </View>
         </TouchableOpacity>
       </View>
