@@ -1,131 +1,134 @@
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  StyleSheet,
-  Text,
-  Pressable,
-  Modal,
-  FlatList,
-  Item,
-  TouchableOpacity,
+	View,
+	StyleSheet,
+	Text,
+	Pressable,
+	Modal,
+	FlatList,
+	Item,
+	TouchableOpacity,
 } from "react-native";
 import useCollection from "../../utils/hooks/useCollection";
 import { getAuth } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import AddJourneyDetailsForm from "../components/AddJourneyDetailsForm";
 import {
-  useTheme,
-  Button,
-  Card,
-  Title,
-  Paragraph,
-  Portal,
+	useTheme,
+	Button,
+	Card,
+	Title,
+	Paragraph,
+	Portal,
 } from "react-native-paper";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 
 const JourneyDetails = ({ route }) => {
-  const { id } = route.params;
-  // console.log("JourneyDetails.jsx - Route Params:", route.params);
-  // console.log("JourneyDetails.jsx ID:", id);
-  const [accomsModalVisible, setaccomsModalVisible] = useState(false);
-  const [eatDrinkModal, setEatDrinkModal] = useState(false);
-  const [attractionsModal, setAttractionsModal] = useState(false);
+	const { id } = route.params;
+	// console.log("JourneyDetails.jsx - Route Params:", route.params);
+	// console.log("JourneyDetails.jsx ID:", id);
+	const [accomsModalVisible, setaccomsModalVisible] = useState(false);
+	const [eatDrinkModal, setEatDrinkModal] = useState(false);
+	const [attractionsModal, setAttractionsModal] = useState(false);
 
-  const navigation = useNavigation();
+	const navigation = useNavigation();
 
-  const { documents: accoms } = useCollection("Accommodation", [
-    "journey_id",
-    "==",
-    id,
-  ]);
-  const { documents: eatDrink } = useCollection("Catering", [
-    "journey_id",
-    "==",
-    id,
-  ]);
-  const { documents: attractions } = useCollection("Attractions", [
-    "journey_id",
-    "==",
-    id,
-  ]);
-  //   console.log(eatDrink);
-  const handleDelete = async (id) => {
-    console.log("deleted", id);
+	const { documents: accoms } = useCollection("Accommodation", [
+		"journey_id",
+		"==",
+		id,
+	]);
+	const { documents: eatDrink } = useCollection("Catering", [
+		"journey_id",
+		"==",
+		id,
+	]);
+	const { documents: attractions } = useCollection("Attractions", [
+		"journey_id",
+		"==",
+		id,
+	]);
+	//   console.log(eatDrink);
+	const handleDelete = async (id) => {
+		console.log("deleted", id);
 
-    //Deletion Logic
-    try {
-      await deleteDoc(doc(db, "Accommodation", id));
-      await deleteDoc(doc(db, "Catering", id));
-    } catch (err) {
-      console.log("Error:", err.message);
-    }
-  };
+		//Deletion Logic
+		try {
+			await deleteDoc(doc(db, "Accommodation", id));
+			await deleteDoc(doc(db, "Catering", id));
+			await deleteDoc(doc(db, "Attractions", id));
+		} catch (err) {
+			console.log("Error:", err.message);
+		}
+	};
 
-  // const handleEdit = async (id) => {
-  // let data = {
-  //   description: "TEsting update",
-  // };
-  // console.log("EDITIIGNGGG", id);
-  // const docRef = doc(db, "Accommodation", id);
-  // await updateDoc(docRef, data)
-  //   .then((docRef) => {
-  //     console.log(
-  //       "A New Document Field has been added to an existing document"
-  //     );
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-  // };
+	// const handleEdit = async (id) => {
+	// let data = {
+	//   description: "TEsting update",
+	// };
+	// console.log("EDITIIGNGGG", id);
+	// const docRef = doc(db, "Accommodation", id);
+	// await updateDoc(docRef, data)
+	//   .then((docRef) => {
+	//     console.log(
+	//       "A New Document Field has been added to an existing document"
+	//     );
+	//   })
+	//   .catch((error) => {
+	//     console.log(error);
+	//   });
+	// };
 
-  const Item = ({ id, address, name, description, rating, test }) => (
-    // console.log(id, "<<<<<< Accom ID");
-    <View style={styles.item}>
-      <Card style={styles.card}>
-        <Card.Content>
-          <Title>
-            {address}-{id}
-          </Title>
-          <Paragraph>{name}</Paragraph>
-          <Paragraph>{description}</Paragraph>
-          <Paragraph>{rating}</Paragraph>
-          <Paragraph>{test}</Paragraph>
-        </Card.Content>
-        <Card.Cover
-          source={{
-            uri: "https://picsum.photos/700",
-          }}
-        />
-        <Card.Actions>
-          <Button
-            onPress={() => {
-              setaccomsModalVisible(false);
-              setEatDrinkModal(false);
-              setAttractionsModal(false);
-            }}
-          >
-            Back
-          </Button>
-          <Button
-            onPress={() => {
-              setaccomsModalVisible(false);
-              navigation.navigate("updateDetails", {
-                id: id,
-                category:
-                  accomsModalVisible === true
-                    ? "Accommodation"
-                    : eatDrinkModal === true
-                    ? "Catering"
-                    : attractionsModal === true
-                    ? "Attractions"
-                    : "",
-              });
-            }}
-          >
-            Edit
-          </Button>
-          {/* <Button
+	const Item = ({ id, address, name, description, rating, test }) => (
+		// console.log(id, "<<<<<< Accom ID");
+		<View style={styles.item}>
+			<Card style={styles.card}>
+				<Card.Content>
+					<Title>
+						{address}-{id}
+					</Title>
+					<Paragraph>{name}</Paragraph>
+					<Paragraph>{description}</Paragraph>
+					<Paragraph>{rating}</Paragraph>
+					<Paragraph>{test}</Paragraph>
+				</Card.Content>
+				<Card.Cover
+					source={{
+						uri: "https://picsum.photos/700",
+					}}
+				/>
+				<Card.Actions>
+					<Button
+						onPress={() => {
+							setaccomsModalVisible(false);
+							setEatDrinkModal(false);
+							setAttractionsModal(false);
+						}}
+					>
+						Back
+					</Button>
+					<Button
+						onPress={() => {
+							setaccomsModalVisible(false);
+							setEatDrinkModal(false);
+							setAttractionsModal(false);
+							navigation.navigate("updateDetails", {
+								id: id,
+								category:
+									accomsModalVisible === true
+										? "Accommodation"
+										: eatDrinkModal === true
+										? "Catering"
+										: attractionsModal === true
+										? "Attractions"
+										: "",
+							});
+						}}
+					>
+						Edit
+					</Button>
+					{/* <Button
             onPress={() => {
               setaccomsModalVisible(false);
               navigation.navigate("detailsForm", {
@@ -136,170 +139,176 @@ const JourneyDetails = ({ route }) => {
           >
             Edit
           </Button> */}
-          <Button
-            onPress={() => {
-              handleDelete(id);
-            }}
-          >
-            Delete
-          </Button>
-        </Card.Actions>
-      </Card>
-    </View>
-  );
+					<Button
+						onPress={() => {
+							handleDelete(id);
+						}}
+					>
+						Delete
+					</Button>
+				</Card.Actions>
+			</Card>
+		</View>
+	);
 
-  const renderItemAccoms = ({ item }) => (
-    <Item
-      address={item.address}
-      name={item.name}
-      description={item.description}
-      rating={item.rating}
-      test={item.test}
-      id={item.id}
-    />
-  );
+	const renderItemAccoms = ({ item }) => (
+		<Item
+			address={item.address}
+			name={item.name}
+			description={item.description}
+			rating={item.rating}
+			test={item.test}
+			id={item.id}
+		/>
+	);
 
-  return (
-    <View style={styles.container}>
-      <View>
-        <Modal visible={accomsModalVisible} animationType="slide">
-          <View>
-            <Button onPress={() => setaccomsModalVisible(false)}>
-              <Text>Close</Text>
-            </Button>
-          </View>
+	return (
+		<View style={styles.container}>
+			<View>
+				<Modal visible={accomsModalVisible} animationType="slide">
+					<View>
+						<Button onPress={() => setaccomsModalVisible(false)}>
+							<Text>Close</Text>
+						</Button>
+					</View>
 
-          <FlatList
-            data={accoms}
-            renderItem={renderItemAccoms}
-            keyExtractor={(item) => item.id}
-          />
+					<FlatList
+						data={accoms}
+						renderItem={renderItemAccoms}
+						keyExtractor={(item) => item.id}
+					/>
 
-          <View>
-            <Button
-              onPress={() => {
-                setaccomsModalVisible(false);
-                navigation.navigate("detailsForm", {
-                  id: id,
-                });
-              }}
-            >
-              <Text>Add Accommodation</Text>
-            </Button>
-          </View>
-        </Modal>
+					<View>
+						<Button
+							onPress={() => {
+								setaccomsModalVisible(false);
+								navigation.navigate("detailsForm", {
+									id: id,
+								});
+							}}
+						>
+							<Text>Add Accommodation</Text>
+						</Button>
+					</View>
+				</Modal>
 
-        <TouchableOpacity onPress={() => setaccomsModalVisible(true)}>
-          <View style={styles.buttonOpacity}>
-            <Text>Accomodation</Text>
-            {/*  */}
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <Modal visible={eatDrinkModal} animationType="slide">
-          <Button onPress={() => setEatDrinkModal(false)}>Close</Button>
-          <FlatList
-            data={eatDrink}
-            renderItem={renderItemAccoms}
-            keyExtractor={(item) => item.id}
-          />
-          <View>
-            <Button
-              onPress={() => {
-                setEatDrinkModal(false);
-                navigation.navigate("detailsForm", { id: id });
-              }}
-            >
-              <Text>Add EatDrink</Text>
-            </Button>
-          </View>
-        </Modal>
+				<TouchableOpacity onPress={() => setaccomsModalVisible(true)}>
+					<View style={styles.buttonOpacity}>
+						<Text>Accomodation</Text>
+						{/*  */}
+					</View>
+				</TouchableOpacity>
+			</View>
+			<View>
+				<Modal visible={eatDrinkModal} animationType="slide">
+					<Button onPress={() => setEatDrinkModal(false)}>
+						Close
+					</Button>
+					<FlatList
+						data={eatDrink}
+						renderItem={renderItemAccoms}
+						keyExtractor={(item) => item.id}
+					/>
+					<View>
+						<Button
+							onPress={() => {
+								setEatDrinkModal(false);
+								navigation.navigate("detailsForm", { id: id });
+							}}
+						>
+							<Text>Add EatDrink</Text>
+						</Button>
+					</View>
+				</Modal>
 
-        <Button onPress={() => setEatDrinkModal(true)}>EatDrink</Button>
-      </View>
-      <View>
-        <Modal visible={attractionsModal} animationType="slide">
-          <Button onPress={() => setAttractionsModal(false)}>Close</Button>
-          <FlatList
-            data={attractions}
-            renderItem={renderItemAccoms}
-            keyExtractor={(item) => item.id}
-          />
-          <View>
-            <Button
-              onPress={() => {
-                setAttractionsModal(false);
-                navigation.navigate("detailsForm", { id: id });
-              }}
-            >
-              <Text>Add Attractions</Text>
-            </Button>
-          </View>
-        </Modal>
+				<Button onPress={() => setEatDrinkModal(true)}>EatDrink</Button>
+			</View>
+			<View>
+				<Modal visible={attractionsModal} animationType="slide">
+					<Button onPress={() => setAttractionsModal(false)}>
+						Close
+					</Button>
+					<FlatList
+						data={attractions}
+						renderItem={renderItemAccoms}
+						keyExtractor={(item) => item.id}
+					/>
+					<View>
+						<Button
+							onPress={() => {
+								setAttractionsModal(false);
+								navigation.navigate("detailsForm", { id: id });
+							}}
+						>
+							<Text>Add Attractions</Text>
+						</Button>
+					</View>
+				</Modal>
 
-        <Button onPress={() => setAttractionsModal(true)}>Attractions</Button>
-      </View>
-      {/* <Button onPress={() => navigation.navigate("JourneyList")}>
+				<Button onPress={() => setAttractionsModal(true)}>
+					Attractions
+				</Button>
+			</View>
+			{/* <Button onPress={() => navigation.navigate("JourneyList")}>
         JourneyList
       </Button> */}
-    </View>
-  );
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // flexDirection: "row",
-    // flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
-  },
-  centeredView: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  buttonOpacity: {
-    borderRadius: 8,
-    paddingVertical: 14,
-    paddingHorizontal: 10,
-    backgroundColor: "pink",
-  },
+	container: {
+		// flexDirection: "row",
+		// flex: 1,
+		// alignItems: "center",
+		// justifyContent: "center",
+	},
+	centeredView: {
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 22,
+	},
+	modalView: {
+		margin: 20,
+		backgroundColor: "white",
+		borderRadius: 20,
+		padding: 35,
+		alignItems: "center",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	button: {
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2,
+	},
+	buttonOpen: {
+		backgroundColor: "#F194FF",
+	},
+	buttonClose: {
+		backgroundColor: "#2196F3",
+	},
+	textStyle: {
+		color: "white",
+		fontWeight: "bold",
+		textAlign: "center",
+	},
+	modalText: {
+		marginBottom: 15,
+		textAlign: "center",
+	},
+	buttonOpacity: {
+		borderRadius: 8,
+		paddingVertical: 14,
+		paddingHorizontal: 10,
+		backgroundColor: "pink",
+	},
 });
 
 // const styles = StyleSheet.create({
@@ -376,7 +385,7 @@ export default JourneyDetails;
 //   );
 
 {
-  /* <View style={styles.centeredView}>
+	/* <View style={styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -437,7 +446,7 @@ export default JourneyDetails;
 }
 
 {
-  /* <View>
+	/* <View>
         <Modal
           animationType="slide"
           transparent={true}
