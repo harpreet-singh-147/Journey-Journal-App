@@ -7,10 +7,12 @@ import {
   Modal,
   FlatList,
   Item,
+  TouchableOpacity,
 } from "react-native";
 import useCollection from "../../utils/hooks/useCollection";
 import { getAuth } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
+import AddJourneyDetailsForm from "../components/AddJourneyDetailsForm";
 import {
   useTheme,
   Button,
@@ -20,13 +22,12 @@ import {
   Portal,
 } from "react-native-paper";
 import { deleteDoc, doc } from "firebase/firestore";
-//Importing DB
 import { db } from "../config/firebaseConfig";
 
 const JourneyDetails = ({ route }) => {
   const { id } = route.params;
-  console.log("Route Params:", route.params);
-  console.log("JJ ID:", id);
+  // console.log("JourneyDetails.jsx - Route Params:", route.params);
+  // console.log("JourneyDetails.jsx ID:", id);
   const [accomsModalVisible, setaccomsModalVisible] = useState(false);
   const [eatDrinkModal, setEatDrinkModal] = useState(false);
   const [attractionsModal, setAttractionsModal] = useState(false);
@@ -55,16 +56,20 @@ const JourneyDetails = ({ route }) => {
     //Deletion Logic
     try {
       await deleteDoc(doc(db, "Accommodation", id));
+      await deleteDoc(doc(db, "Catering", id));
     } catch (err) {
       console.log("Error:", err.message);
     }
   };
 
   const Item = ({ id, address, name, description, rating, test }) => (
+    // console.log(id, "<<<<<< Accom ID");
     <View style={styles.item}>
       <Card style={styles.card}>
         <Card.Content>
-          <Title>{address}</Title>
+          <Title>
+            {address}-{id}
+          </Title>
           <Paragraph>{name}</Paragraph>
           <Paragraph>{description}</Paragraph>
           <Paragraph>{rating}</Paragraph>
@@ -129,7 +134,9 @@ const JourneyDetails = ({ route }) => {
             <Button
               onPress={() => {
                 setaccomsModalVisible(false);
-                navigation.navigate("detailsForm", { id: id });
+                navigation.navigate("detailsForm", {
+                  id: id,
+                });
               }}
             >
               <Text>Add Accommodation</Text>
@@ -137,9 +144,11 @@ const JourneyDetails = ({ route }) => {
           </View>
         </Modal>
 
-        <Button onPress={() => setaccomsModalVisible(true)}>
-          <Text>Accomodation</Text>
-        </Button>
+        <TouchableOpacity onPress={() => setaccomsModalVisible(true)}>
+          <View style={styles.buttonOpacity}>
+            <Text>Accomodation</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       <View>
         <Modal visible={eatDrinkModal} animationType="slide">
@@ -238,6 +247,12 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  buttonOpacity: {
+    borderRadius: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    backgroundColor: "pink",
   },
 });
 

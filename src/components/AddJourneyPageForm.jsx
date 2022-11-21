@@ -16,6 +16,7 @@ import { useAuthentication } from "../../utils/hooks/userAuthentication";
 import useCollection from "../../utils/hooks/useCollection";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { useNavigation } from "@react-navigation/native";
 
 const addJourneyValidationSchema = yup.object({
   journey_title: yup.string().required("please enter a journey"),
@@ -25,7 +26,7 @@ const addJourneyValidationSchema = yup.object({
 const AddJourneyPageForm = () => {
   const auth = getAuth();
   const user = auth.currentUser;
-
+  const navigation = useNavigation();
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -36,6 +37,7 @@ const AddJourneyPageForm = () => {
     details.date = date;
     const reference = collection(db, "Journey");
     await addDoc(reference, details);
+    navigation.navigate("JourneyList");
     console.log(details);
   };
 

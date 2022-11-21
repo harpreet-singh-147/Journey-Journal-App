@@ -204,6 +204,7 @@ export default function AddJourneyDetailsForm({ route, navigation }) {
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [showModal, setShowModal] = useState(false);
   console.log(selectedCategory, "<<<<< cat");
   //     console.log(date);
 

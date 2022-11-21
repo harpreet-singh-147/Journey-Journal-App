@@ -12,7 +12,14 @@ import {
 import { useTheme, Button, Card, Title, Paragraph } from "react-native-paper";
 import useCollection from "../../utils/hooks/useCollection";
 import { getAuth } from "firebase/auth";
-import { deleteDoc, doc } from "firebase/firestore";
+import {
+  deleteDoc,
+  getDocs,
+  doc,
+  where,
+  collection,
+  query,
+} from "firebase/firestore";
 //Importing DB
 import { db } from "../config/firebaseConfig";
 
@@ -26,11 +33,49 @@ const JourneyCards = ({ navigation }) => {
 
     //Deletion Logic
     try {
+      //Main Journey Deletion
       await deleteDoc(doc(db, "Journey", id));
+
       //Go to All three collections, and remove data where journey_id = id
-      await deleteDoc(doc(db, "Accommodation", id));
-      await deleteDoc(doc(db, "Catering", id));
-      await deleteDoc(doc(db, "Attractions", id));
+
+      //Deleting All Accommodations By Journey ID
+      const q = query(
+        collection(db, "Accommodation"),
+        where("journey_id", "==", id)
+      );
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((singledoc) => {
+        deleteDoc(doc(db, "Accommodation", singledoc.id)).then(() =>
+          console.log("deleted", singledoc)
+        );
+      });
+
+      //Deleting All Accommodations By Journey ID
+      const q1 = query(
+        collection(db, "Catering"),
+        where("journey_id", "==", id)
+      );
+
+      const querySnapshot1 = await getDocs(q1);
+      querySnapshot1.forEach((singledoc) => {
+        deleteDoc(doc(db, "Catering", singledoc.id)).then(() =>
+          console.log("deleted")
+        );
+      });
+
+      //Deleting All Accommodations By Journey ID
+      const q2 = query(
+        collection(db, "Attractions"),
+        where("journey_id", "==", id)
+      );
+
+      const querySnapshot2 = await getDocs(q2);
+      querySnapshot2.forEach((singledoc) => {
+        deleteDoc(doc(db, "Attractions", singledoc.id)).then(() =>
+          console.log("deleted")
+        );
+      });
     } catch (err) {
       console.log("Error:", err.message);
     }
