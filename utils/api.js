@@ -18,7 +18,6 @@ export function fetchAutoCompleteApi(cityValue) {
       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(cityValue)}`
     )
     .then(({ data }) => {
-      console.log('data: ', data.features);
       return data;
     })
     .catch((error) => {

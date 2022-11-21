@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-community/blur": "^4.3.0",
     "@react-native-community/datetimepicker": "6.5.2",
     "@react-native-firebase/app": "^16.4.3",
     "@react-native-picker/picker": "^2.4.8",

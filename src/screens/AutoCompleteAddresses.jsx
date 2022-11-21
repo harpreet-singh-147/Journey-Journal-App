@@ -3,29 +3,34 @@ import { Text, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, Button } from "react-native-paper";
 import { fetchAutoCompleteApi } from "../../utils/api";
+import SearchDropDown from "../components/SearchDropDown"
 
 
 
 function AutoCompleteAddresses() {
   const [cityValue, setCityValue] = useState({});
-  const [isRequested, setIsRequested] = useState("no")
+  const [autoCompleteFormatted, setAutoCompleteFormatted] = useState({})
+  const [searching, setSearching] = useState(false);
   console.log('cityValue: ', cityValue);
-let currentItems;
 
-  useEffect(() => {
+useEffect(() => {
+    if (cityValue.length > 0) {
+      setSearching(true)
+    } else {
+      setSearching(false)
+    }
     if (cityValue.length > 3) {
-      setIsRequested("yes")
       const delayDebounceFn = setTimeout(() => {
         console.log(cityValue);
         // Send Axios request here
         fetchAutoCompleteApi(cityValue)
-          .then((data) => {
-            // features.map((feature) => {
-            //   console.log(feature);
-            // })
+          .then(({features}) => {
+            //.map to show all suggestions
+            setAutoCompleteFormatted(features[0].properties.formatted)
+            
           })
           .catch((err) => {
-            console.log("Oh no :(");
+            console.log("Oh no :(" + 'err: ', err);
           });
       }, 300);
       return () => clearTimeout(delayDebounceFn);
@@ -47,9 +52,12 @@ let currentItems;
             mode="outlined"
             left={<TextInput.Icon icon="human-greeting-variant" />}
           />
-          <Text>Is requested = {isRequested}</Text>
         </View>
       </View>
+      {
+        cityValue && 
+        <SearchDropDown autoComplete={autoCompleteFormatted}/>
+      }
     </SafeAreaView>
   );
 }
