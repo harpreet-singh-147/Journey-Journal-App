@@ -197,14 +197,12 @@ const addDetailsValidationSchema = yup.object({
 
 export default function AddJourneyDetailsForm({ route, navigation }) {
   const { id } = route.params;
-  console.log("JourneyID:", id);
   const auth = getAuth();
   const user = auth.currentUser;
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  console.log(selectedCategory, "<<<<< cat");
   //     console.log(date);
 
   const addDetails = async (details) => {
@@ -219,7 +217,6 @@ export default function AddJourneyDetailsForm({ route, navigation }) {
       : alert("please select category");
     await addDoc(reference, details);
     setSelectedCategory("");
-    console.log(details);
 
     //redirect to the Journey Page
     navigation.navigate("JourneyList");
