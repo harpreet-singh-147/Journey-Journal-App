@@ -6,6 +6,7 @@ import {
   Modal,
   FlatList,
   TouchableOpacity,
+  VirtualizedList,
 } from "react-native";
 import useCollection from "../../utils/hooks/useCollection";
 import { useNavigation } from "@react-navigation/native";
@@ -123,39 +124,43 @@ const JourneyDetails = ({ route }) => {
   return (
     <View style={styles.container}>
       <View>
-        <Modal visible={accomsModalVisible} animationType="slide">
-          <View>
-            <Button onPress={() => setaccomsModalVisible(false)}>
-              <Text>Close</Text>
-            </Button>
-          </View>
+        <View>
+          <Modal visible={accomsModalVisible} animationType="slide">
+            <View>
+              <Button onPress={() => setaccomsModalVisible(false)}>
+                <Text>Close</Text>
+              </Button>
+            </View>
 
-          <FlatList
-            data={accoms}
-            renderItem={renderItemAccoms}
-            keyExtractor={(item) => item.id}
-          />
+            <FlatList
+              data={accoms}
+              renderItem={renderItemAccoms}
+              keyExtractor={(item) => item.id}
+            />
 
-          <View>
-            <Button
-              onPress={() => {
-                setaccomsModalVisible(false);
-                navigation.navigate("AddJourneyDetailsForm", {
-                  id: id,
-                  category: accomsModalVisible === true ? "Accommodation" : "",
-                });
-              }}
-            >
-              <Text>Add Accommodation</Text>
-            </Button>
-          </View>
-        </Modal>
-
-        <TouchableOpacity onPress={() => setaccomsModalVisible(true)}>
-          <View style={styles.buttonOpacity}>
-            <Text>Accomodation</Text>
-          </View>
-        </TouchableOpacity>
+            <View>
+              <Button
+                onPress={() => {
+                  setaccomsModalVisible(false);
+                  navigation.navigate("AddJourneyDetailsForm", {
+                    id: id,
+                    category:
+                      accomsModalVisible === true ? "Accommodation" : "",
+                  });
+                }}
+              >
+                <Text>Add Accommodation</Text>
+              </Button>
+            </View>
+          </Modal>
+        </View>
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={() => setaccomsModalVisible(true)}
+        >
+          Accommodation
+        </Button>
       </View>
       <View>
         <Modal visible={eatDrinkModal} animationType="slide">
@@ -179,8 +184,13 @@ const JourneyDetails = ({ route }) => {
             </Button>
           </View>
         </Modal>
-
-        <Button onPress={() => setEatDrinkModal(true)}>EatDrink</Button>
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={() => setEatDrinkModal(true)}
+        >
+          EatDrink
+        </Button>
       </View>
       <View>
         <Modal visible={attractionsModal} animationType="slide">
@@ -204,8 +214,13 @@ const JourneyDetails = ({ route }) => {
             </Button>
           </View>
         </Modal>
-
-        <Button onPress={() => setAttractionsModal(true)}>Attractions</Button>
+        <Button
+          style={styles.button}
+          mode="contained"
+          onPress={() => setAttractionsModal(true)}
+        >
+          Attractions
+        </Button>
       </View>
     </View>
   );
@@ -213,35 +228,16 @@ const JourneyDetails = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flexDirection: "row",
-    // flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center",
-  },
-  centeredView: {
+    flexDirection: "column",
+    flex: 1,
+    alignItems: "center",
     justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
+
   button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+    margin: 4,
+    width: "100%",
+    alignSelf: "center",
   },
   buttonOpen: {
     backgroundColor: "#F194FF",
