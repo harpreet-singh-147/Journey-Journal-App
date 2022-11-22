@@ -19,8 +19,9 @@ import {
 import { db } from "../config/firebaseConfig";
 
 const JourneyCards = ({ navigation }) => {
-  const auth = getAuth();
-  const user = auth.currentUser;
+	console.log("navigation: inside JOURNEY CARDS COMPONENT", navigation);
+	const auth = getAuth();
+	const user = auth.currentUser;
 
   const deleteJourney = async (id) => {
     console.log("deleted", id);

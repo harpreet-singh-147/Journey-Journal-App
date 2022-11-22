@@ -26,6 +26,25 @@ export function fetchAutoCompleteApi(cityValue) {
     });
 }
 
+const placesApi = axios.create({
+  baseURL: "https://api.geoapify.com/v2/places?",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": Constants.manifest.extra.geopifyApiKey,
+  },
+});
 
+export function fetchCatering(journeyLocation) {
+  return placesApi
+    .get(
+      `https://api.geoapify.com/v2/places?categories=catering&filter=place:${journeyLocation}&limit=20`
+    )
+    .then(({ data }) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
 export default autocompleteApi;
