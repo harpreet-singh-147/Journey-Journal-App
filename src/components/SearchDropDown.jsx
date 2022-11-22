@@ -24,15 +24,18 @@ function SearchDropDown({ autoComplete }) {
 
 const styles = StyleSheet.create({
 container: {
-    position: 'absolute',
     left: 0, right: 0, bottom: 0,
     backgroundColor: 'gray',
     opacity: 0.4,
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
+    width: '100%',
+    alignSelf: 'center',
   },
   autoCompleteBox: {
-
+    height: 50,
+    justifyContent: 'center',
+    paddingLeft: 10,
   }
 })
 
