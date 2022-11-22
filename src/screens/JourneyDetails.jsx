@@ -67,44 +67,55 @@ const JourneyDetails = ({ route }) => {
             uri: "https://picsum.photos/700",
           }}
         />
-        <Card.Actions>
-          <Button
-            onPress={() => {
-              setaccomsModalVisible(false);
-              setEatDrinkModal(false);
-              setAttractionsModal(false);
-            }}
-          >
-            Back
-          </Button>
-          <Button
-            onPress={() => {
-              setaccomsModalVisible(false);
-              setEatDrinkModal(false);
-              setAttractionsModal(false);
-              navigation.navigate("updateDetails", {
-                id: id,
-                category:
-                  accomsModalVisible === true
-                    ? "Accommodation"
-                    : eatDrinkModal === true
-                    ? "Catering"
-                    : attractionsModal === true
-                    ? "Attractions"
-                    : "",
-              });
-            }}
-          >
-            Edit
-          </Button>
-
-          <Button
-            onPress={() => {
-              handleDelete(id);
-            }}
-          >
-            Delete
-          </Button>
+        <Card.Actions style={{ alignSelf: "center" }}>
+          <View>
+            <Button
+              style={styles.buttonCards}
+              mode="contained"
+              onPress={() => {
+                setaccomsModalVisible(false);
+                setEatDrinkModal(false);
+                setAttractionsModal(false);
+              }}
+            >
+              Back
+            </Button>
+          </View>
+          <View>
+            <Button
+              style={styles.buttonCards}
+              mode="contained"
+              onPress={() => {
+                setaccomsModalVisible(false);
+                setEatDrinkModal(false);
+                setAttractionsModal(false);
+                navigation.navigate("updateDetails", {
+                  id: id,
+                  category:
+                    accomsModalVisible === true
+                      ? "Accommodation"
+                      : eatDrinkModal === true
+                      ? "Catering"
+                      : attractionsModal === true
+                      ? "Attractions"
+                      : "",
+                });
+              }}
+            >
+              Edit
+            </Button>
+          </View>
+          <View>
+            <Button
+              style={styles.buttonCards}
+              mode="contained"
+              onPress={() => {
+                handleDelete(id);
+              }}
+            >
+              Delete
+            </Button>
+          </View>
         </Card.Actions>
       </Card>
     </View>
@@ -127,9 +138,10 @@ const JourneyDetails = ({ route }) => {
         <View>
           <Modal visible={accomsModalVisible} animationType="slide">
             <View>
-              <Button onPress={() => setaccomsModalVisible(false)}>
-                <Text>Close</Text>
-              </Button>
+              <Button
+                icon="close-thick"
+                onPress={() => setaccomsModalVisible(false)}
+              ></Button>
             </View>
 
             <FlatList
@@ -138,8 +150,9 @@ const JourneyDetails = ({ route }) => {
               keyExtractor={(item) => item.id}
             />
 
-            <View>
+            <View style={{ marginBottom: 20, marginTop: 20 }}>
               <Button
+                mode="contained"
                 onPress={() => {
                   setaccomsModalVisible(false);
                   navigation.navigate("AddJourneyDetailsForm", {
@@ -149,7 +162,7 @@ const JourneyDetails = ({ route }) => {
                   });
                 }}
               >
-                <Text>Add Accommodation</Text>
+                Add Accommodation
               </Button>
             </View>
           </Modal>
@@ -157,14 +170,21 @@ const JourneyDetails = ({ route }) => {
       </View>
       <View>
         <Modal visible={eatDrinkModal} animationType="slide">
-          <Button onPress={() => setEatDrinkModal(false)}>Close</Button>
+          <View>
+            <Button
+              icon="close-thick"
+              onPress={() => setEatDrinkModal(false)}
+            ></Button>
+          </View>
+
           <FlatList
             data={eatDrink}
             renderItem={renderItemAccoms}
             keyExtractor={(item) => item.id}
           />
-          <View>
+          <View style={{ marginBottom: 20, marginTop: 20 }}>
             <Button
+              mode="contained"
               onPress={() => {
                 setEatDrinkModal(false);
                 navigation.navigate("AddJourneyDetailsForm", {
@@ -173,21 +193,28 @@ const JourneyDetails = ({ route }) => {
                 });
               }}
             >
-              <Text>Add EatDrink</Text>
+              Add EatDrink
             </Button>
           </View>
         </Modal>
       </View>
       <View>
         <Modal visible={attractionsModal} animationType="slide">
-          <Button onPress={() => setAttractionsModal(false)}>Close</Button>
+          <View>
+            <Button
+              icon="close-thick"
+              onPress={() => setAttractionsModal(false)}
+            ></Button>
+          </View>
+
           <FlatList
             data={attractions}
             renderItem={renderItemAccoms}
             keyExtractor={(item) => item.id}
           />
-          <View>
+          <View style={{ marginBottom: 20, marginTop: 20 }}>
             <Button
+              mode="contained"
               onPress={() => {
                 setAttractionsModal(false);
                 navigation.navigate("AddJourneyDetailsForm", {
@@ -196,7 +223,7 @@ const JourneyDetails = ({ route }) => {
                 });
               }}
             >
-              <Text>Add Attractions</Text>
+              Add Attractions
             </Button>
           </View>
         </Modal>
@@ -234,12 +261,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    padding: 10,
   },
-
+  item: {
+    padding: 15,
+  },
   button: {
     margin: 4,
     width: "100%",
     alignSelf: "center",
+  },
+  buttonCards: {
+    width: "100%",
   },
   buttonOpen: {
     backgroundColor: "#F194FF",

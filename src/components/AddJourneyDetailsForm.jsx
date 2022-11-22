@@ -125,7 +125,7 @@ export default function AddJourneyDetailsForm({ route, navigation }) {
                 </Text>
                 <View>
                   <Button
-                    style={{ marginTop: 10 }}
+                    style={{ marginBottom: 10 }}
                     mode="contained"
                     onPress={() => showMode("date")}
                   >
