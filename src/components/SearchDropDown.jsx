@@ -17,7 +17,7 @@ function SearchDropDown({ autoComplete }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.autoCompleteBox}>
-        <Text onPress={() => Linking.openURL("http://google.com")}>
+        <Text>
           {autoComplete}
         </Text>
       </View>
