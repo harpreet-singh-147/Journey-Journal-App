@@ -29,7 +29,6 @@ const addDetailsValidationSchema = yup.object({
 
 export default function AddJourneyDetailsForm({ route, navigation }) {
   const { id, category } = route.params;
-  console.log("AddJourneyDetailsForm.jsx JourneyID:", category);
   const auth = getAuth();
   const user = auth.currentUser;
   const [date, setDate] = useState(new Date());

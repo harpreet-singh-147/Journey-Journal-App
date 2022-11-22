@@ -36,7 +36,6 @@ const AddJourneyPageForm = () => {
     const reference = collection(db, "Journey");
     await addDoc(reference, details);
     navigation.navigate("JourneyList");
-    console.log(details);
   };
 
   const onChange = (event, selectedDate) => {

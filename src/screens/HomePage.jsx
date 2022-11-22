@@ -7,12 +7,12 @@ import { useNavigation } from "@react-navigation/native";
 
 const auth = getAuth();
 
-const user = auth.currentUser;
-if (user !== null) {
-  console.log(user.uid);
-  console.log(user.displayName);
-  console.log(user.email);
-}
+// const user = auth.currentUser;
+// if (user !== null) {
+//   console.log(user.uid);
+//   console.log(user.displayName);
+//   console.log(user.email);
+// }
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -27,16 +27,6 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text>Welcome {user?.displayName}!</Text>
-      <Button
-        style={styles.button}
-        onPress={() => navigation.navigate("autocomplete")}
-        icon="arrow-right"
-        mode="contained"
-        contentStyle={{ height: 50, flexDirection: "row-reverse" }}
-        loading={signOutIsLoadingBtn}
-      >
-        Autocomplete
-      </Button>
       <Button
         style={styles.button}
         onPress={() => signOutBtnFuncCombine()}

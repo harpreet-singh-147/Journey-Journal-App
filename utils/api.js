@@ -11,15 +11,12 @@ const autocompleteApi = axios.create({
   },
 });
 
-export function fetchAutoCompleteApi(cityValue, signal) {
+export function fetchAutoCompleteApi(cityValue) {
   return autocompleteApi
     .get(
       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
         cityValue
       )}`,
-      {
-        signal: signal,
-      }
     )
     .then(({ data }) => {
       return data;
