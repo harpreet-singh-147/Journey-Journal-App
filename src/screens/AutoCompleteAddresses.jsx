@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, Button } from "react-native-paper";
 import { fetchAutoCompleteApi } from "../../utils/api";
@@ -9,10 +15,9 @@ function AutoCompleteAddresses() {
   const [cityValue, setCityValue] = useState({});
   const [autoCompleteFormatted, setAutoCompleteFormatted] = useState([]);
   const [searching, setSearching] = useState(false);
-  
-  // autoCompleteFormatted.map(feature => {
-  //   console.log(feature);
-  // })
+  const [placeId, setPlaceId] = useState(null);
+
+  console.log('placeId: ', placeId);
 
   useEffect(() => {
     if (cityValue.length > 0) {
@@ -50,18 +55,35 @@ function AutoCompleteAddresses() {
             left={<TextInput.Icon icon="human-greeting-variant" />}
           />
         </View>
-        {autoCompleteFormatted.map((feature, index) => (
-          cityValue && <SearchDropDown key={index} autoComplete={feature.properties.formatted} />
-          ))}
-        </View>
+        {cityValue && (
+          <FlatList
+            data={autoCompleteFormatted}
+            renderItem={({ item, index }) => {
+              return (
+                <TouchableOpacity
+                  style={styles.resultItem}
+                  onPress={() => setPlaceId({ placeId: item.properties.place_id })}
+                >
+                  <Text>{item.properties.formatted}</Text>
+                </TouchableOpacity>
+              );
+            }}
+          >
+            {/* <SearchDropDown
+              key={index}
+              autoComplete={feature.properties.formatted}
+            /> */}
+          </FlatList>
+        )}
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   autocompleteContainer: {
-    width: '90%',
-    alignSelf: 'center',
+    width: "90%",
+    alignSelf: "center",
     // padding: 20,
     // flex: 1,
     // backgroundColor: "gray",
@@ -76,6 +98,13 @@ const styles = StyleSheet.create({
   //   padding-right: 31,
   //   font-size: 16,
   // }
+  resultItem: {
+    borderWidth: 1,
+    borderColor: "purple",
+    height: 50,
+    justifyContent: "center",
+    paddingLeft: 10,
+  },
 });
 
 export default AutoCompleteAddresses;
