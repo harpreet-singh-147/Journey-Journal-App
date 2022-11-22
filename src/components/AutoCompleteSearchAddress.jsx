@@ -5,70 +5,65 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, Button } from "react-native-paper";
 import { fetchAutoCompleteApi } from "../../utils/api";
 
 function AutoCompleteSearchAddress(props) {
-
   const [formattedCityValues, setFormattedCityValues] = useState({});
-  // const [cityValue, setCityValue] = useState("");
-  // const [autoCompleteFormatted, setAutoCompleteFormatted] = useState([]);
-  const [placeId, setPlaceId] = useState(null);
 
-  const [locationInfo, setLocationInfo] = useState("");
-
-  function onClickHandler(formattedOptions) {
-    props.passSetIsShowingResults(false);
+  function onClickHandler(formattedOptions, placeId) {
     setFormattedCityValues(formattedOptions);
-    props.passLocationInfo(locationInfo)
+    props.passSetIsShowingResults(false);
+    props.passPlaceId(placeId);
+  }
+
+  function onClickClearText() {
+    setFormattedCityValues({});
+    props.passClearPlaceId("")
   }
 
   function cityValueProp(text) {
-    props.passData(text)
+    props.passCityValue(text);
   }
 
   return (
-        <View style={styles.autocompleteContainer}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              autoCapitalize="none"
-              label="Enter an address here"
-              style={styles.textInput}
-              onChangeText={(text) => cityValueProp(text)}
-              value={formattedCityValues}
-              mode="outlined"
-              left={<TextInput.Icon icon="location-enter" />}
-              right={
-                <TextInput.Icon
-                  icon="close"
-                  onPress={() => setFormattedCityValues({})}
-                />
-              }
-            />
-          </View>
-          {props.isShowingResults && (
-            <FlatList
-              data={props.autoCompleteFeatures}
-              renderItem={({ item, index }) => {
-                setLocationInfo(item);
-                const formattedOptions = item.properties.formatted;
-                return (
-                  <TouchableOpacity
-                    style={styles.resultItem}
-                    onPress={() => onClickHandler(formattedOptions)}
-                  >
-                    <Text>{formattedOptions}</Text>
-                  </TouchableOpacity>
-                );
-              }}
-              // keyExtractor={(index) => index}
-              style={styles.searchResultsContainer}
-            />
-          )}
-        </View>
+    <View style={styles.autocompleteContainer}>
+      <View style={styles.inputContainer}>
+        <TextInput
+          autoCapitalize="none"
+          label="Enter an address here"
+          style={styles.textInput}
+          onChangeText={(text) => cityValueProp(text)}
+          value={formattedCityValues}
+          mode="outlined"
+          left={<TextInput.Icon icon="location-enter" />}
+          right={
+            <TextInput.Icon icon="close" onPress={onClickClearText} />
+          }
+        />
+      </View>
+      {props.isShowingResults && (
+        <FlatList
+          data={props.autoCompleteFeatures}
+          renderItem={({ item, index }) => {
+            const formattedOptions = item.properties.formatted;
+            const placeId = item.properties.place_id;
+            return (
+              <TouchableOpacity
+                style={styles.resultItem}
+                onPress={() => onClickHandler(formattedOptions, placeId)}
+              >
+                <Text>{formattedOptions}</Text>
+              </TouchableOpacity>
+            );
+          }}
+          // keyExtractor={(index) => index}
+          style={styles.searchResultsContainer}
+        />
+      )}
+    </View>
   );
 }
 

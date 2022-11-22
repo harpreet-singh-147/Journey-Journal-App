@@ -16,6 +16,7 @@ export default function UserStack() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={Nav} />
+        <Stack.Screen name="TestApi" component={TestApi} />
 
         <Stack.Screen name="JourneyDetails" component={JourneyDetails} />
         <Stack.Screen name="JourneyList" component={JourneyList} />
