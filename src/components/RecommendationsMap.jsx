@@ -1,8 +1,9 @@
 import { Text } from "react-native-paper";
 
-function RecommendationsMap(){
+function RecommendationsMap({placeId}){
+  console.log('placeId: ', placeId);
   return (
-    <Text>Hello</Text>
+    <Text>{placeId}</Text>
   )
 }
 

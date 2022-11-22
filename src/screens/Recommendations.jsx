@@ -13,12 +13,6 @@ function Recommendations() {
   const [autoCompleteFeatures, setAutoCompleteFeatures] = useState([]);
   const [isShowingResults, setIsShowingResults] = useState(false);
   const [placeId, setPlaceId] = useState("");
-  
-	useEffect(() => {
-		if (placeId) {
-			console.log(placeId);
-		}
-	})
 
   function passCityValue(data) {
     setCityValue(data);
@@ -70,7 +64,7 @@ function Recommendations() {
         />
       </View>
       <View>
-        <RecommendationsMap />
+        <RecommendationsMap placeId={placeId}/>
       </View>
     </SafeAreaView>
   );
