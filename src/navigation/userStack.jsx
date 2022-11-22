@@ -7,6 +7,7 @@ import JourneyDetails from "../screens/JourneyDetails";
 import AddJourneyDetailsForm from "../components/AddJourneyDetailsForm";
 import JourneyList from "../screens/JourneyList";
 import UpdateJourneyDetails from "../components/UpdateJourneyDetails";
+import AutoCompleteAddresses from "../screens/AutoCompleteAddresses"
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,8 @@ export default function UserStack() {
           component={AddJourneyDetailsForm}
         />
         <Stack.Screen name="updateDetails" component={UpdateJourneyDetails} />
+        <Stack.Screen name="detailsForm" component={AddJourneyDetailsForm} />
+        <Stack.Screen name="autocomplete" component={AutoCompleteAddresses} />
       </Stack.Navigator>
     </NavigationContainer>
   );
