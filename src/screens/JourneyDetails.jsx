@@ -154,13 +154,6 @@ const JourneyDetails = ({ route }) => {
             </View>
           </Modal>
         </View>
-        <Button
-          style={styles.button}
-          mode="contained"
-          onPress={() => setaccomsModalVisible(true)}
-        >
-          Accommodation
-        </Button>
       </View>
       <View>
         <Modal visible={eatDrinkModal} animationType="slide">
@@ -184,13 +177,6 @@ const JourneyDetails = ({ route }) => {
             </Button>
           </View>
         </Modal>
-        <Button
-          style={styles.button}
-          mode="contained"
-          onPress={() => setEatDrinkModal(true)}
-        >
-          EatDrink
-        </Button>
       </View>
       <View>
         <Modal visible={attractionsModal} animationType="slide">
@@ -214,13 +200,29 @@ const JourneyDetails = ({ route }) => {
             </Button>
           </View>
         </Modal>
-        <Button
-          style={styles.button}
-          mode="contained"
-          onPress={() => setAttractionsModal(true)}
-        >
-          Attractions
-        </Button>
+        <View>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => setaccomsModalVisible(true)}
+          >
+            Accommodation
+          </Button>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => setEatDrinkModal(true)}
+          >
+            EatDrink
+          </Button>
+          <Button
+            style={styles.button}
+            mode="contained"
+            onPress={() => setAttractionsModal(true)}
+          >
+            Attractions
+          </Button>
+        </View>
       </View>
     </View>
   );
