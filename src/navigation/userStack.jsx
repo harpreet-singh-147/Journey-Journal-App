@@ -15,9 +15,13 @@ export default function UserStack() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={Nav} />
+
         <Stack.Screen name="JourneyDetails" component={JourneyDetails} />
         <Stack.Screen name="JourneyList" component={JourneyList} />
-        <Stack.Screen name="detailsForm" component={AddJourneyDetailsForm} />
+        <Stack.Screen
+          name="AddJourneyDetailsForm"
+          component={AddJourneyDetailsForm}
+        />
         <Stack.Screen name="updateDetails" component={UpdateJourneyDetails} />
       </Stack.Navigator>
     </NavigationContainer>

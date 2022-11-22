@@ -1,15 +1,11 @@
-import { useState, useEffect } from "react";
-import { TextInput } from "react-native-paper";
 import {
-  Text,
   View,
   StyleSheet,
   FlatList,
   SafeAreaView,
-  ScrollView,
   StatusBar,
 } from "react-native";
-import { useTheme, Button, Card, Title, Paragraph } from "react-native-paper";
+import { Button, Card, Title, Paragraph } from "react-native-paper";
 import useCollection from "../../utils/hooks/useCollection";
 import { getAuth } from "firebase/auth";
 import {
@@ -20,25 +16,18 @@ import {
   collection,
   query,
 } from "firebase/firestore";
-//Importing DB
 import { db } from "../config/firebaseConfig";
 
 const JourneyCards = ({ navigation }) => {
-  //   console.log("navigation: inside JOURNEY CARDS COMPONENT", navigation);
   const auth = getAuth();
   const user = auth.currentUser;
 
   const deleteJourney = async (id) => {
     console.log("deleted", id);
 
-    //Deletion Logic
     try {
-      //Main Journey Deletion
       await deleteDoc(doc(db, "Journey", id));
 
-      //Go to All three collections, and remove data where journey_id = id
-
-      //Deleting All Accommodations By Journey ID
       const q = query(
         collection(db, "Accommodation"),
         where("journey_id", "==", id)
@@ -51,7 +40,6 @@ const JourneyCards = ({ navigation }) => {
         );
       });
 
-      //Deleting All Accommodations By Journey ID
       const q1 = query(
         collection(db, "Catering"),
         where("journey_id", "==", id)
@@ -64,7 +52,6 @@ const JourneyCards = ({ navigation }) => {
         );
       });
 
-      //Deleting All Accommodations By Journey ID
       const q2 = query(
         collection(db, "Attractions"),
         where("journey_id", "==", id)
@@ -91,7 +78,7 @@ const JourneyCards = ({ navigation }) => {
         </Card.Content>
         <Card.Cover
           source={{
-            uri: "https://picsum.photos/700",
+            uri: "https://picsum.photos/id/10/700",
           }}
         />
         <Card.Actions>
@@ -100,7 +87,6 @@ const JourneyCards = ({ navigation }) => {
               navigation.navigate("JourneyDetails", { id: id });
             }}
           >
-            {/*  /products/:id */}
             Journey Details
           </Button>
           <Button
@@ -108,7 +94,6 @@ const JourneyCards = ({ navigation }) => {
               deleteJourney(id);
             }}
           >
-            {/*  /products/:id */}
             Delete Journey
           </Button>
         </Card.Actions>
@@ -156,34 +141,3 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
 });
-
-// const JourneyCards = () => {
-// 	const { documents: trips } = useCollection("Journ");
-// 	console.log("documents: ", trips);
-// 	return (
-// 		// <FlatList
-// 		// 	numColumns={2}
-// 		// 	keyExtractor={(trips) => trips.id}
-// 		// 	data={trips}
-// 		// 	renderItem={({ item }) => (
-// 		// 		<SafeAreaView style={styles.container}>
-// <Card style={styles.card}>
-// 	<Card.Content>
-// 		<Title>{item.city}</Title>
-// 		<Paragraph>{item.journey_title}</Paragraph>
-// 	</Card.Content>
-// 	<Card.Cover
-// 		source={{
-// 			uri: "https://picsum.photos/700",
-// 		}}
-// 	/>
-// 	<Card.Actions>
-// 		<Button>Cancel</Button>
-// 		<Button>Ok</Button>
-// 	</Card.Actions>
-// </Card>
-// 		// 		</SafeAreaView>
-// 		// 	)}
-// 		// />
-// 	);
-// };

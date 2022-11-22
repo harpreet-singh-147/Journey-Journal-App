@@ -8,16 +8,15 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik } from "formik";
-import { useTheme, Button, TextInput } from "react-native-paper";
-import { Picker } from "@react-native-picker/picker";
-import { collection, addDoc, updateDoc } from "firebase/firestore";
+import { Button, TextInput } from "react-native-paper";
+import { collection, addDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { db } from "../config/firebaseConfig";
 import * as yup from "yup";
 
 const addDetailsValidationSchema = yup.object({
   name: yup.string().required(),
-  description: yup.string().required().max(100),
+  description: yup.string().required().max(200),
   rating: yup
     .string()
     .required()
@@ -29,32 +28,23 @@ const addDetailsValidationSchema = yup.object({
 });
 
 export default function AddJourneyDetailsForm({ route, navigation }) {
-  const { id } = route.params;
-  //   console.log("AddJourneyDetailsForm.jsx JourneyID:", id);
+  const { id, category } = route.params;
+  console.log("AddJourneyDetailsForm.jsx JourneyID:", category);
   const auth = getAuth();
   const user = auth.currentUser;
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  console.log(selectedCategory, "<<<<< cat");
-  //     console.log(date);
 
   const addDetails = async (details) => {
     details.uid = user.uid;
     details.date = date;
-
-    //Adding ID to the details
     details.journey_id = id;
 
-    const reference = selectedCategory
-      ? collection(db, selectedCategory)
-      : alert("please select category");
-    await addDoc(reference, details);
-    setSelectedCategory("");
-    console.log(details);
+    const reference = collection(db, category);
 
-    //redirect to the Journey Page
+    await addDoc(reference, details);
+
     navigation.navigate("JourneyList");
   };
 
@@ -73,7 +63,6 @@ export default function AddJourneyDetailsForm({ route, navigation }) {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ padding: 25 }}>
           <Formik
-            // enableReinitialize
             initialValues={{
               name: "",
               description: "",
@@ -84,7 +73,6 @@ export default function AddJourneyDetailsForm({ route, navigation }) {
             validationSchema={addDetailsValidationSchema}
             onSubmit={(values, actions) => {
               addDetails(values);
-              //   actions.resetForm();
             }}
           >
             {(props) => (
@@ -155,17 +143,7 @@ export default function AddJourneyDetailsForm({ route, navigation }) {
                     />
                   )}
                 </View>
-                <Picker
-                  selectedValue={selectedCategory}
-                  onValueChange={(itemValue, itemIndex) =>
-                    setSelectedCategory(itemValue)
-                  }
-                >
-                  <Picker.Item label="Please select category" />
-                  <Picker.Item label="Accommodation" value="Accommodation" />
-                  <Picker.Item label="Catering" value="Catering" />
-                  <Picker.Item label="Attractions" value="Attractions" />
-                </Picker>
+
                 <Button mode="contained" onPress={props.handleSubmit}>
                   Submit
                 </Button>
