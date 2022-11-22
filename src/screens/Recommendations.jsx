@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchAutoCompleteApi } from "../../utils/api";
 import AutoCompleteSearchAddress from "../components/AutoCompleteSearchAddress";
 import RecommendationsMap from "../components/RecommendationsMap";
+import RecommendationsCategories from "../components/RecommendationsCategories";
 
 function Recommendations() {
   const [cityValue, setCityValue] = useState("");
@@ -26,7 +24,7 @@ function Recommendations() {
     setPlaceId(data);
   }
 
-	function passClearPlaceId(value) {
+  function passClearPlaceId(value) {
     setPlaceId(value);
   }
 
@@ -52,30 +50,37 @@ function Recommendations() {
   }, [cityValue]);
 
   return (
-    <SafeAreaView>
-      <View>
+    <SafeAreaView style={styles.recommendationsContainer}>
+      <View style={styles.autoCompleteContainer}>
         <AutoCompleteSearchAddress
           passPlaceId={passPlaceId}
           passCityValue={passCityValue}
           passSetIsShowingResults={passSetIsShowingResults}
           isShowingResults={isShowingResults}
           autoCompleteFeatures={autoCompleteFeatures}
-					passClearPlaceId={passClearPlaceId}
+          passClearPlaceId={passClearPlaceId}
         />
       </View>
+      <View style={styles.recCategoryContainer}>
+        <RecommendationsCategories />
+      </View>
       <View>
-        <RecommendationsMap placeId={placeId}/>
+        <RecommendationsMap placeId={placeId} />
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  dummy: {
-    width: 600,
-    height: 200,
-    backgroundColor: "hotpink",
-    marginTop: 20,
+  recommendationsContainer: {
+    height: "100%",
+  },
+  autoCompleteContainer: {
+    zIndex: 10,
+  },
+  recCategoryContainer: {
+    height: "15%",
+    // backgroundColor: "hotpink",
   },
 });
 
