@@ -172,6 +172,7 @@ export default function UpdateJourneyDetails({ route }) {
 										)}
 									</View>
 									<Button
+										style={{ marginTop: 15 }}
 										mode="contained"
 										onPress={props.handleSubmit}
 									>
