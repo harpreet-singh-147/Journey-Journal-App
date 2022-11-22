@@ -297,20 +297,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   topButtons: {
-//     marginVertical: 10,
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     marginHorizontal: 10,
-//     alignSelf: "center",
-//   },
-//   test: {
-//     flex: 3,
-//   },
-// });
-
 export default JourneyDetails;

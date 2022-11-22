@@ -26,13 +26,16 @@ const AddJourneyPageForm = () => {
   const user = auth.currentUser;
   const navigation = useNavigation();
   const [date, setDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-  const [img, setImg] = useState("");
+  const [mode1, setMode1] = useState("date");
+  const [show1, setShow1] = useState(false);
 
   const addDetails = async (details) => {
     details.uid = user.uid;
     details.date = date;
+    details.endDate = endDate;
     const reference = collection(db, "Journey");
     await addDoc(reference, details);
     navigation.navigate("JourneyList");
@@ -44,10 +47,19 @@ const AddJourneyPageForm = () => {
     setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
+  const onChange1 = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow1(Platform.OS === "ios");
+    setEndDate(currentDate);
+  };
 
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
+  };
+  const showMode1 = (currentMode) => {
+    setShow1(true);
+    setMode1(currentMode);
   };
 
   return (
@@ -91,7 +103,7 @@ const AddJourneyPageForm = () => {
                     mode="contained"
                     onPress={() => showMode("date")}
                   >
-                    Select Date
+                    Start Date
                   </Button>
                 </View>
                 <View>
@@ -102,6 +114,26 @@ const AddJourneyPageForm = () => {
                       mode={mode}
                       is24Hour={true}
                       onChange={onChange}
+                    />
+                  )}
+                </View>
+                <View>
+                  <Button
+                    style={{ marginTop: 10 }}
+                    mode="contained"
+                    onPress={() => showMode1("date")}
+                  >
+                    End Date
+                  </Button>
+                </View>
+                <View>
+                  {show1 && (
+                    <DateTimePicker
+                      testID="dateTimePicker"
+                      value={endDate}
+                      mode={mode1}
+                      is24Hour={true}
+                      onChange={onChange1}
                     />
                   )}
                 </View>
