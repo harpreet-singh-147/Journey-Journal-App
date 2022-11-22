@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -6,9 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput, Button } from "react-native-paper";
-import { fetchAutoCompleteApi } from "../../utils/api";
+import { TextInput } from "react-native-paper";
 
 function AutoCompleteSearchAddress(props) {
   const [formattedCityValues, setFormattedCityValues] = useState({});
@@ -72,9 +70,6 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
     zIndex: 10,
-    // padding: 20,
-    // flex: 1,
-    // backgroundColor: "gray",
   },
   searchResultsContainer: {
     width: 340,

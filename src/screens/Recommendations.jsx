@@ -1,13 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Text,
   View,
   StyleSheet,
-  FlatList,
-  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput, Button } from "react-native-paper";
 import { fetchAutoCompleteApi } from "../../utils/api";
 import AutoCompleteSearchAddress from "../components/AutoCompleteSearchAddress";
 import RecommendationsMap from "../components/RecommendationsMap";
@@ -46,7 +42,6 @@ function Recommendations() {
     } else if (cityValue.length > 3) {
       setIsShowingResults(true);
       const delayDebounceFn = setTimeout(() => {
-        // Send Axios request here
         fetchAutoCompleteApi(cityValue)
           .then(({ features }) => {
             if (features.length === 0) {
@@ -77,9 +72,6 @@ function Recommendations() {
       <View>
         <RecommendationsMap />
       </View>
-      {/* <View>
-          <Text>{JSON.stringify(item.properties, null, 2)}</Text>
-        </View> */}
     </SafeAreaView>
   );
 }
