@@ -5,6 +5,7 @@ import AddJourney from "../screens/AddJourney";
 import HomePage from "../screens/HomePage";
 import JourneyList from "../screens/JourneyList";
 import Recommendations from "../screens/Recommendations";
+import Events from "../screens/Events";
 
 const Nav = () => {
   const [index, setIndex] = React.useState(0);
@@ -20,15 +21,17 @@ const Nav = () => {
     {
       key: "recommendations",
       title: "Recommendations",
-      focusedIcon: "thumb-up",
-      unfocusedIcon: "thumb-up",
+      focusedIcon: "map-marker-star-outline",
+      unfocusedIcon: "map-marker-star-outline",
     },
+    { key: "events", title: "Events", focusedIcon: "party-popper" },
   ]);
   const renderScene = BottomNavigation.SceneMap({
     home: HomePage,
     tripList: JourneyList,
     addTrip: AddJourney,
     recommendations: Recommendations,
+    events: Events,
   });
   return (
     <BottomNavigation

@@ -94,6 +94,7 @@ const JourneyCards = ({ navigation }) => {
             >
               Journey Details
             </Button>
+
             <Button
               style={styles.button}
               mode="contained"

@@ -54,9 +54,7 @@ const JourneyDetails = ({ route }) => {
     <View style={styles.item}>
       <Card style={styles.card}>
         <Card.Content>
-          <Title>
-            {address}-{id}
-          </Title>
+          <Title>{address}</Title>
           <Paragraph>{name}</Paragraph>
           <Paragraph>{description}</Paragraph>
           <Paragraph>{rating}</Paragraph>
@@ -136,7 +134,7 @@ const JourneyDetails = ({ route }) => {
     <View style={styles.container}>
       <View>
         <View>
-          <Modal visible={accomsModalVisible} animationType="slide">
+          <Modal visible={accomsModalVisible} animationType="fade">
             <View>
               <Button
                 icon="close-thick"
@@ -150,7 +148,14 @@ const JourneyDetails = ({ route }) => {
               keyExtractor={(item) => item.id}
             />
 
-            <View style={{ marginBottom: 20, marginTop: 20 }}>
+            <View
+              style={{
+                marginBottom: 25,
+                marginTop: 25,
+                marginLeft: 30,
+                marginRight: 30,
+              }}
+            >
               <Button
                 mode="contained"
                 onPress={() => {
@@ -169,7 +174,7 @@ const JourneyDetails = ({ route }) => {
         </View>
       </View>
       <View>
-        <Modal visible={eatDrinkModal} animationType="slide">
+        <Modal visible={eatDrinkModal} animationType="fade">
           <View>
             <Button
               icon="close-thick"
@@ -182,7 +187,14 @@ const JourneyDetails = ({ route }) => {
             renderItem={renderItemAccoms}
             keyExtractor={(item) => item.id}
           />
-          <View style={{ marginBottom: 20, marginTop: 20 }}>
+          <View
+            style={{
+              marginBottom: 25,
+              marginTop: 25,
+              marginLeft: 30,
+              marginRight: 30,
+            }}
+          >
             <Button
               mode="contained"
               onPress={() => {
@@ -199,7 +211,7 @@ const JourneyDetails = ({ route }) => {
         </Modal>
       </View>
       <View>
-        <Modal visible={attractionsModal} animationType="slide">
+        <Modal visible={attractionsModal} animationType="fade">
           <View>
             <Button
               icon="close-thick"
@@ -212,7 +224,14 @@ const JourneyDetails = ({ route }) => {
             renderItem={renderItemAccoms}
             keyExtractor={(item) => item.id}
           />
-          <View style={{ marginBottom: 20, marginTop: 20 }}>
+          <View
+            style={{
+              marginBottom: 25,
+              marginTop: 25,
+              marginLeft: 30,
+              marginRight: 30,
+            }}
+          >
             <Button
               mode="contained"
               onPress={() => {

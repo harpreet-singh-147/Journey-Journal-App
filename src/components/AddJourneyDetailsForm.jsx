@@ -115,6 +115,7 @@ export default function AddJourneyDetailsForm({ route, navigation }) {
                   {props.touched.description && props.errors.description}
                 </Text>
                 <TextInput
+                  keyboardType="numeric"
                   placeholder="rating (1-5)"
                   onChangeText={props.handleChange("rating")}
                   value={props.values.rating}
