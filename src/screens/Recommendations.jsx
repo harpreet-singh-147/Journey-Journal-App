@@ -73,35 +73,61 @@ const Recommendations = () => {
 		&size=10&page=1&city=${selectedCity}
 		`;
 		try {
+			// console.log(Object.keys(data));
+			// console.log(Object.keys(data._embedded));
+			// console.log("VENUES ", data._embedded.venues[0].address);
 			const response = await fetch(baseURL);
 			const data = await response.json();
 			// console.log(data);
-			const results = data._embedded.events.map(
-				({ name, type, url, images, dates, pleaseNote, id }) => {
-					return {
-						url: url,
-						name: name,
-						image_uri: images[0].url,
-						type: type,
-						date: dates.start.localDate,
-						note: pleaseNote,
-						id: id,
-					};
-				}
-			);
+			// ({ name, type, url, images, dates, note, id, venues }) => {
+			const results = data._embedded.events.map((data) => {
+				// console.log(Object.keys(data));
+				// console.log(data.url);
+				// console.log(data.name);
+				// console.log(data.images[0].url);
+				// console.log(data.dates.start.localDate);
+				// console.log(data._embedded.venues[0].address.line1);
+				// console.log(data._embedded.venues[0].postalCode);
+				// console.log(data._embedded.venues[0].city.name);
+				return {
+					url: data.url,
+					name: data.name,
+					image_uri: data.images[0].url,
+					type: data.type,
+					date: data.dates.start.localDate,
+					id: data.id,
+					address: data._embedded.venues[0].address.line1,
+					city: data._embedded.venues[0].city.name,
+					post_code: data._embedded.venues[0].city.postalCode,
+				};
+			});
 			setEvents(results);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-	const Item = ({ name, image, type, date, note, url, id }) => (
+	const Item = ({
+		name,
+		image,
+		type,
+		date,
+		note,
+		url,
+		id,
+		address,
+		city,
+		post_code,
+	}) => (
 		<View style={styles.item}>
 			<Card>
 				<Card.Title title={date} subtitle={type} />
 				<Card.Content>
 					<Title>{name}</Title>
 					<Paragraph>{note}</Paragraph>
+					<Paragraph>{address}</Paragraph>
+					<Paragraph>{city}</Paragraph>
+					<Paragraph>{post_code}</Paragraph>
 					<Button
 						icon="open-in-new"
 						mode="elevated"
@@ -123,6 +149,9 @@ const Recommendations = () => {
 	const renderItem = ({ item }) => (
 		<Item
 			name={item.name}
+			address={item.address}
+			city={item.city}
+			post_code={item.post_code}
 			image={item.image_uri}
 			type={item.type}
 			date={item.date}
