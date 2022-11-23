@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 
 import {
@@ -11,6 +11,9 @@ import {
 const auth = getAuth();
 
 const Register = ({ navigation }) => {
+	const image = {
+		uri: "https://images.unsplash.com/photo-1501868984184-76121ed6a6e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2970&q=80",
+	};
 	const [value, setValue] = useState({
 		username: "",
 		email: "",
@@ -60,63 +63,64 @@ const Register = ({ navigation }) => {
 					<Text>{value.error}</Text>
 				</View>
 			)}
-
-			<View style={{ height: "40%", justifyContent: "center" }}>
-				<Text
-					style={{
-						fontSize: 25,
-						fontWeight: "600",
-						alignSelf: "center",
-						marginTop: 20,
-					}}
-				>
-					Register
-				</Text>
-			</View>
-			<View style={styles.controls}>
-				<TextInput
-					autoCapitalize="none"
-					label="Username"
-					style={styles.textInput}
-					value={value.username}
-					onChangeText={(text) =>
-						setValue({ ...value, username: text })
-					}
-					mode="outlined"
-					left={<TextInput.Icon icon="human-greeting-variant" />}
-				/>
-				<TextInput
-					autoCapitalize="none"
-					label="Email"
-					style={styles.textInput}
-					value={value.email}
-					onChangeText={(text) => setValue({ ...value, email: text })}
-					mode="outlined"
-					left={<TextInput.Icon icon="email" />}
-				/>
-				<TextInput
-					autoCapitalize="none"
-					label="Password"
-					style={styles.textInput}
-					value={value.password}
-					onChangeText={(text) =>
-						setValue({ ...value, password: text })
-					}
-					secureTextEntry={true}
-					mode="outlined"
-					left={<TextInput.Icon icon="key" />}
-				/>
-				<Button
-					style={styles.button}
-					onPress={signUp}
-					mode="contained"
-					contentStyle={{ height: 50, flexDirection: "row-reverse" }}
-					icon="arrow-right"
-					loading={signUpIsLoadingBtn}
-				>
-					Sign Up
-				</Button>
-			</View>
+			<ImageBackground
+				source={image}
+				resizeMode="cover"
+				style={styles.image}
+			>
+				<View
+					style={{ height: "40%", justifyContent: "center" }}
+				></View>
+				<View style={styles.controls}>
+					<TextInput
+						autoCapitalize="none"
+						label="Username"
+						style={styles.textInput}
+						value={value.username}
+						onChangeText={(text) =>
+							setValue({ ...value, username: text })
+						}
+						mode="outlined"
+						left={<TextInput.Icon icon="human-greeting-variant" />}
+					/>
+					<TextInput
+						autoCapitalize="none"
+						label="Email"
+						style={styles.textInput}
+						value={value.email}
+						onChangeText={(text) =>
+							setValue({ ...value, email: text })
+						}
+						mode="outlined"
+						left={<TextInput.Icon icon="email" />}
+					/>
+					<TextInput
+						autoCapitalize="none"
+						label="Password"
+						style={styles.textInput}
+						value={value.password}
+						onChangeText={(text) =>
+							setValue({ ...value, password: text })
+						}
+						secureTextEntry={true}
+						mode="outlined"
+						left={<TextInput.Icon icon="key" />}
+					/>
+					<Button
+						style={styles.button}
+						onPress={signUp}
+						mode="contained"
+						contentStyle={{
+							height: 50,
+							flexDirection: "row-reverse",
+						}}
+						icon="arrow-right"
+						loading={signUpIsLoadingBtn}
+					>
+						Sign Up
+					</Button>
+				</View>
+			</ImageBackground>
 		</View>
 	);
 };
@@ -144,6 +148,11 @@ const styles = StyleSheet.create({
 		padding: 10,
 		color: "#fff",
 		backgroundColor: "#D54826FF",
+	},
+	image: {
+		flex: 1,
+		justifyContent: "center",
+		opacity: 0.9,
 	},
 });
 
