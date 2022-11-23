@@ -1,13 +1,13 @@
 import { StyleSheet, View } from "react-native";
 import { IconButton, Button } from "react-native-paper";
 
-function RecommendationsCategories() {
+function RecommendationsCategories(props) {
   return (
     <View style={styles.categoryContainer}>
       <IconButton
         style={styles.button}
         isLoading={true}
-        onPress={() => findAccomodationServices()}
+        onPress={() => props.passCategory('accomodation')}
         mode="contained"
         size={50}
         icon="room-service"
@@ -16,7 +16,7 @@ function RecommendationsCategories() {
       <IconButton
         style={styles.button}
         isLoading={true}
-        onPress={() => findCateryServices()}
+        onPress={() => props.passCategory('catery')}
         mode="contained"
         size={50}
         icon="food"
@@ -25,7 +25,7 @@ function RecommendationsCategories() {
       <IconButton
         style={styles.button}
         isLoading={true}
-        onPress={() => findAttractionsServices()}
+        onPress={() => props.passCategory('attractions')}
         mode="contained"
         size={50}
         icon="eiffel-tower"

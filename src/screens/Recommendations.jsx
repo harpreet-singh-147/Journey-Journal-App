@@ -11,6 +11,9 @@ function Recommendations() {
   const [autoCompleteFeatures, setAutoCompleteFeatures] = useState([]);
   const [isShowingResults, setIsShowingResults] = useState(false);
   const [placeId, setPlaceId] = useState("");
+  const [category, setCategory] = useState("");
+  console.log('category: ', category);
+
 
   function passCityValue(data) {
     setCityValue(data);
@@ -26,6 +29,10 @@ function Recommendations() {
 
   function passClearPlaceId(value) {
     setPlaceId(value);
+  }
+
+  function passCategory(category) {
+    setCategory(category);
   }
 
   useEffect(() => {
@@ -62,10 +69,10 @@ function Recommendations() {
         />
       </View>
       <View style={styles.recCategoryContainer}>
-        <RecommendationsCategories />
+        <RecommendationsCategories passCategory={passCategory}/>
       </View>
       <View>
-        <RecommendationsMap placeId={placeId} />
+        <RecommendationsMap placeId={placeId} category={category} />
       </View>
     </SafeAreaView>
   );
