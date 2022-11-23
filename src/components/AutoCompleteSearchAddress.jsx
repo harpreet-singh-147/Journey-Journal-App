@@ -11,15 +11,17 @@ import { TextInput } from "react-native-paper";
 function AutoCompleteSearchAddress(props) {
   const [formattedCityValues, setFormattedCityValues] = useState({});
 
-  function onClickHandler(formattedOptions, placeId) {
+  function onClickHandler(formattedOptions, placeId, lonLat) {
     setFormattedCityValues(formattedOptions);
     props.passSetIsShowingResults(false);
     props.passPlaceId(placeId);
+    props.passLonLat(lonLat)
   }
 
   function onClickClearText() {
     setFormattedCityValues({});
-    props.passClearPlaceId("")
+    props.passClearPlaceId();
+    props.passClearLonLat()
   }
 
   function cityValueProp(text) {
@@ -37,9 +39,7 @@ function AutoCompleteSearchAddress(props) {
           value={formattedCityValues}
           mode="outlined"
           left={<TextInput.Icon icon="location-enter" />}
-          right={
-            <TextInput.Icon icon="close" onPress={onClickClearText} />
-          }
+          right={<TextInput.Icon icon="close" onPress={onClickClearText} />}
         />
       </View>
       {props.isShowingResults && (
@@ -48,10 +48,16 @@ function AutoCompleteSearchAddress(props) {
           renderItem={({ item, index }) => {
             const formattedOptions = item.properties.formatted;
             const placeId = item.properties.place_id;
+            const lonLat = [{
+              lon: item.properties.lon,
+              lat: item.properties.lat,
+            }];
             return (
               <TouchableOpacity
                 style={styles.resultItem}
-                onPress={() => onClickHandler(formattedOptions, placeId)}
+                onPress={() =>
+                  onClickHandler(formattedOptions, placeId, lonLat)
+                }
               >
                 <Text>{formattedOptions}</Text>
               </TouchableOpacity>

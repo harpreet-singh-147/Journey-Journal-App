@@ -16,7 +16,7 @@ export function fetchAutoCompleteApi(cityValue) {
     .get(
       `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
         cityValue
-      )}`,
+      )}`
     )
     .then(({ data }) => {
       return data;
@@ -34,10 +34,10 @@ const placesApi = axios.create({
   },
 });
 
-export function fetchCatering(journeyLocation) {
+export function fetchPlaces(placeId, category) {
   return placesApi
     .get(
-      `https://api.geoapify.com/v2/places?categories=catering&filter=place:${journeyLocation}&limit=20`
+      `https://api.geoapify.com/v2/places?categories=${category}&filter=place:${placeId}&limit=2`
     )
     .then(({ data }) => {
       return data;

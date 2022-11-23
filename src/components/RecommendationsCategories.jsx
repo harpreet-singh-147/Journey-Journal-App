@@ -1,36 +1,65 @@
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { IconButton, Button } from "react-native-paper";
 
+
+
 function RecommendationsCategories(props) {
+  const [buttonAccomodationSelect, setButtonAccomodationSelect] = useState(false);
+  const [buttonCaterySelect, setButtonCaterySelect] = useState(false);
+  const [buttonAttractionsSelect, setButtonAttractionsSelect] = useState(false);
+
+
+  function categoryAccomodation() {
+    props.passCategory("accommodation")
+    setButtonAccomodationSelect(true)
+    setButtonCaterySelect(false)
+    setButtonAttractionsSelect(false)
+  }
+  
+  function categoryCatery() {
+    props.passCategory("catery")
+    setButtonCaterySelect(true)
+    setButtonAccomodationSelect(false)
+    setButtonAttractionsSelect(false)
+  }
+  
+  function categoryAttractions() {
+    props.passCategory("attractions")
+    setButtonAttractionsSelect(true)
+    setButtonAccomodationSelect(false)
+    setButtonCaterySelect(false)
+  }
+
   return (
     <View style={styles.categoryContainer}>
       <IconButton
         style={styles.button}
         isLoading={true}
-        onPress={() => props.passCategory('accomodation')}
+        onPress={categoryAccomodation}
         mode="contained"
         size={50}
         icon="room-service"
-      >
-      </IconButton>
+        selected={buttonAccomodationSelect}
+      ></IconButton>
       <IconButton
         style={styles.button}
         isLoading={true}
-        onPress={() => props.passCategory('catery')}
+        onPress={categoryCatery}
         mode="contained"
         size={50}
         icon="food"
-      >
-      </IconButton>
+        selected={buttonCaterySelect}
+      ></IconButton>
       <IconButton
         style={styles.button}
         isLoading={true}
-        onPress={() => props.passCategory('attractions')}
+        onPress={categoryAttractions}
         mode="contained"
         size={50}
         icon="eiffel-tower"
-      >
-      </IconButton>
+        selected={buttonAttractionsSelect}
+      ></IconButton>
     </View>
   );
 }
@@ -41,8 +70,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
-  button: {
-  },
+  button: {},
 });
 
 export default RecommendationsCategories;

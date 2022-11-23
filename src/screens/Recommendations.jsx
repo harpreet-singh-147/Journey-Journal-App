@@ -12,9 +12,8 @@ function Recommendations() {
   const [isShowingResults, setIsShowingResults] = useState(false);
   const [placeId, setPlaceId] = useState("");
   const [category, setCategory] = useState("");
-  console.log('category: ', category);
-
-
+  const [lonLat, setLonLat] = useState([])
+  
   function passCityValue(data) {
     setCityValue(data);
   }
@@ -27,12 +26,20 @@ function Recommendations() {
     setPlaceId(data);
   }
 
-  function passClearPlaceId(value) {
-    setPlaceId(value);
+  function passClearPlaceId() {
+    setPlaceId("");
   }
 
   function passCategory(category) {
     setCategory(category);
+  }
+
+  function passLonLat(lonLat) {
+    setLonLat(lonLat)
+  }
+
+  function passClearLonLat() {
+    setLonLat([])
   }
 
   useEffect(() => {
@@ -66,13 +73,15 @@ function Recommendations() {
           isShowingResults={isShowingResults}
           autoCompleteFeatures={autoCompleteFeatures}
           passClearPlaceId={passClearPlaceId}
+          passLonLat={passLonLat}
+          passClearLonLat={passClearLonLat}
         />
       </View>
       <View style={styles.recCategoryContainer}>
         <RecommendationsCategories passCategory={passCategory}/>
       </View>
       <View>
-        <RecommendationsMap placeId={placeId} category={category} />
+        <RecommendationsMap placeId={placeId} category={category} locationLonLat={lonLat}/>
       </View>
     </SafeAreaView>
   );
