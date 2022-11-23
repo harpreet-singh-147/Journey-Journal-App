@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Nav from "../components/Nav";
 import JourneyDetails from "../screens/JourneyDetails";
-import TestApi from "../screens/TestApi"
 import AddJourneyDetailsForm from "../components/AddJourneyDetailsForm";
 import JourneyList from "../screens/JourneyList";
 import UpdateJourneyDetails from "../components/UpdateJourneyDetails";
@@ -16,8 +15,6 @@ export default function UserStack() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={Nav} />
-        <Stack.Screen name="TestApi" component={TestApi} />
-
         <Stack.Screen name="JourneyDetails" component={JourneyDetails} />
         <Stack.Screen name="JourneyList" component={JourneyList} />
         <Stack.Screen

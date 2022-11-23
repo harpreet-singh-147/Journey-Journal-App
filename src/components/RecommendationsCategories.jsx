@@ -7,7 +7,7 @@ function RecommendationsCategories() {
       <IconButton
         style={styles.button}
         isLoading={true}
-        onPress={() => findCateryServices()}
+        onPress={() => findAccomodationServices()}
         mode="contained"
         size={50}
         icon="room-service"
@@ -25,7 +25,7 @@ function RecommendationsCategories() {
       <IconButton
         style={styles.button}
         isLoading={true}
-        onPress={() => findCateryServices()}
+        onPress={() => findAttractionsServices()}
         mode="contained"
         size={50}
         icon="eiffel-tower"
