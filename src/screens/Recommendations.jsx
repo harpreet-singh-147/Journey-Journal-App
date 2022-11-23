@@ -96,7 +96,9 @@ const styles = StyleSheet.create({
   },
   recCategoryContainer: {
     height: "15%",
-    // backgroundColor: "hotpink",
+    width: "85%",
+    alignSelf: "center",
+    marginTop: 5,
   },
 });
 

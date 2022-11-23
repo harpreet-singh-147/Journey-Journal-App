@@ -25,40 +25,11 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
       setRegion({
         latitude: locationLonLat[0].lat,
         longitude: locationLonLat[0].lon,
-        latitudeDelta: 17.462712897586556,
-        longitudeDelta: 28.30500204116106,
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03,
       });
     }
   }, [locationLonLat]);
-
-  // if(placeId.length > 0) {
-  //   fetchLocation()
-  //   // .then((res) => {
-
-  //   // })
-  // }
-
-  // function userLocation() {
-  //   setIsLoading(true);
-  //   (async () => {
-  //     let { status } = await Location.requestForegroundPermissionsAsync();
-  //     if (status !== "granted") {
-  //       setErrorMsg("Permission to access location was denied");
-  //       setIsLoading(false);
-  //       return;
-  //     }
-  //     let location = await Location.getCurrentPositionAsync({
-  //       enableHighAccuracy: true,
-  //     });
-  //     setIsLoading(false);
-  //     setCurrLocationRegion({
-  //       latitude: location.coords.latitude,
-  //       longitude: location.coords.longitude,
-  //       latitudeDelta: 0.0022,
-  //       longitudeDelta: 0.0021,
-  //     });
-  //   })();
-  // }
 
   function fetchLocationClick() {
     if (category && placeId) {
@@ -71,8 +42,8 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
             id: index,
             title: feature.properties.name,
             coordinates: {
-              latitude: feature.geometry.coordinates[0],
-              longitude: feature.geometry.coordinates[1],
+              longitude: feature.geometry.coordinates[0],
+              latitude: feature.geometry.coordinates[1],
             },
           });
         });
@@ -88,7 +59,9 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
   // };
   return (
     <View style={styles.mapContainer}>
-      <Button onPress={fetchLocationClick}>Search</Button>
+      <Button mode="contained" style={styles.button} onPress={fetchLocationClick}>
+        Search
+      </Button>
       <MapView
         style={styles.map}
         initialRegion={{
@@ -104,22 +77,15 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
         provider="google"
         showsUserLocation={true}
       >
-        {markers.map((marker) => {
-          console.log("marker: ", marker);
+        {markers.map((marker, index) => (
           <Marker
             title={marker.title}
-            key={marker.id}
+            key={index}
             coordinate={marker.coordinates}
             description={category}
-          >
-            <Callout>
-              <Text>Location</Text>
-            </Callout>
-          </Marker>;
-        })}
+          />
+        ))}
       </MapView>
-      {/* <Text style={styles.text}>Current latitude: {region.latitude}</Text>
-      <Text style={styles.text}>Current longitude: {region.longitude}</Text> */}
     </View>
   );
 }
@@ -133,6 +99,10 @@ const styles = StyleSheet.create({
     // width: "100%",
     height: 300,
   },
+  button: {
+    alignSelf: "center",
+    marginVertical: 10,
+  }
 });
 
 export default RecommendationsMap;

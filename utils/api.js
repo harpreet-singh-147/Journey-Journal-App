@@ -37,7 +37,7 @@ const placesApi = axios.create({
 export function fetchPlaces(placeId, category) {
   return placesApi
     .get(
-      `https://api.geoapify.com/v2/places?categories=${category}&filter=place:${placeId}&limit=2`
+      `https://api.geoapify.com/v2/places?categories=${category}&filter=place:${placeId}&limit=20`
     )
     .then(({ data }) => {
       return data;
