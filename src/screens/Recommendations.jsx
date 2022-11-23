@@ -19,30 +19,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const Recommendations = () => {
 	const [selectedCity, setSelectedCity] = useState("");
 	const [events, setEvents] = useState(null);
-	// console.log("events: ", events);
-	// console.log("selectedCity: ", selectedCity);
-
 	const [date, setDate] = useState(new Date());
-
 	const [endDate, setEndDate] = useState(new Date());
-	console.log("endDate: ", endDate);
 	const [mode, setMode] = useState("date");
 	const [show, setShow] = useState(false);
 	const [mode1, setMode1] = useState("date");
 	const [show1, setShow1] = useState(false);
 
-	const startFormatted = (date) => {
+	const formatDate = (date) => {
 		const formatted = date.toISOString().substring(0, 19);
 		return formatted + "Z";
 	};
 
-	const endFormatted = (endDate) => {
-		const formatted = endDate.toISOString().substring(0, 19);
-		return formatted + "Z";
-	};
-
-	const start = startFormatted(date);
-	const end = endFormatted(endDate);
+	const start = formatDate(date);
+	const end = formatDate(endDate);
 
 	const onChange = (event, selectedDate) => {
 		const currentDate = selectedDate;
@@ -65,30 +55,16 @@ const Recommendations = () => {
 	};
 
 	const handleClick = async () => {
-		// https://app.ticketmaster.com/discovery/v2/events?apikey=${TICKETMASTER_API}&locale=*&size=10&city=${selectedCity}
 		const baseURL = `https://app.ticketmaster.com/discovery/v2/events?apikey=${TICKETMASTER_API}&locale=*&startDateTime=
 			${start}
 		&endDateTime=
 			${end}
-		&size=10&page=1&city=${selectedCity}
+		&size=10&page=1&sort=date,asc&city=${selectedCity}
 		`;
 		try {
-			// console.log(Object.keys(data));
-			// console.log(Object.keys(data._embedded));
-			// console.log("VENUES ", data._embedded.venues[0].address);
 			const response = await fetch(baseURL);
 			const data = await response.json();
-			// console.log(data);
-			// ({ name, type, url, images, dates, note, id, venues }) => {
 			const results = data._embedded.events.map((data) => {
-				// console.log(Object.keys(data));
-				// console.log(data.url);
-				// console.log(data.name);
-				// console.log(data.images[0].url);
-				// console.log(data.dates.start.localDate);
-				// console.log(data._embedded.venues[0].address.line1);
-				// console.log(data._embedded.venues[0].postalCode);
-				// console.log(data._embedded.venues[0].city.name);
 				return {
 					url: data.url,
 					name: data.name,
@@ -98,7 +74,7 @@ const Recommendations = () => {
 					id: data.id,
 					address: data._embedded.venues[0].address.line1,
 					city: data._embedded.venues[0].city.name,
-					post_code: data._embedded.venues[0].city.postalCode,
+					post_code: data._embedded.venues[0].postalCode,
 				};
 			});
 			setEvents(results);
@@ -121,26 +97,23 @@ const Recommendations = () => {
 	}) => (
 		<View style={styles.item}>
 			<Card>
-				<Card.Title title={date} subtitle={type} />
+				<Card.Title title={date} subtitle={city} />
 				<Card.Content>
-					<Title>{name}</Title>
-					<Paragraph>{note}</Paragraph>
-					<Paragraph>{address}</Paragraph>
-					<Paragraph>{city}</Paragraph>
-					<Paragraph>{post_code}</Paragraph>
+					<Text variant="titleLarge">{`${name}`}</Text>
+					<Text variant="titleSmall">{`Address: ${address}`}</Text>
+					<Text variant="titleSmall">{`Post Code: ${post_code}`}</Text>
+				</Card.Content>
+				<Card.Cover source={{ uri: `${image}` }} />
+				<Card.Actions>
 					<Button
 						icon="open-in-new"
 						mode="elevated"
 						style={{ color: "blue" }}
 						onPress={() => Linking.openURL(url)}
 					>
-						Book here
+						Buy tickets
 					</Button>
-				</Card.Content>
-				<Card.Cover source={{ uri: `${image}` }} />
-				<Card.Actions>
-					<Button>Cancel</Button>
-					<Button>Ok</Button>
+					<Button>Something else </Button>
 				</Card.Actions>
 			</Card>
 		</View>
@@ -195,7 +168,6 @@ const Recommendations = () => {
 						/>
 					)}
 				</View>
-
 				<View>
 					<Button
 						style={{ marginTop: 10 }}
