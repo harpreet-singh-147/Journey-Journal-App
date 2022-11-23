@@ -7,13 +7,19 @@ import JourneyDetails from "../screens/JourneyDetails";
 import AddJourneyDetailsForm from "../components/AddJourneyDetailsForm";
 import JourneyList from "../screens/JourneyList";
 import UpdateJourneyDetails from "../components/UpdateJourneyDetails";
+import CustomNavigationBar from "../components/CustomNavigation";
 
 const Stack = createStackNavigator();
 
 export default function UserStack() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          header: (props) => <CustomNavigationBar {...props} />,
+        }}
+      >
         <Stack.Screen name="Home" component={Nav} />
 
         <Stack.Screen name="JourneyDetails" component={JourneyDetails} />

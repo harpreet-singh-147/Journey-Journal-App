@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { View, StyleSheet, FlatList, Linking } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Linking,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { TICKETMASTER_API } from "@env";
 import {
   Button,
@@ -27,12 +34,23 @@ const Events = () => {
   const [show1, setShow1] = useState(false);
 
   const formatDate = (date) => {
-    const formatted = date.toISOString().substring(0, 19);
-    return formatted + "Z";
+    const formatted = date.toISOString().substring(0, 10);
+    const dateObj = {
+      date1: formatted + "T00:00:00Z",
+      date2: formatted + "T23:59:59Z",
+    };
+    return dateObj;
   };
 
+  // const formatDate1 = (date) => {
+  //   const formatted = date.toISOString().substring(0, 10);
+  //   return formatted + "T23:59:59Z";
+  // };
   const start = formatDate(date);
-  const end = formatDate(endDate);
+  // const end = formatDate1(endDate);
+
+  console.log(start.date1, "<<<<<< start");
+  // console.log(end, "<<<<<<<<End");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -56,15 +74,17 @@ const Events = () => {
 
   const handleClick = async () => {
     const baseURL = `https://app.ticketmaster.com/discovery/v2/events?apikey=${TICKETMASTER_API}&locale=*&startDateTime=
-			${start}
+			${start.date1}
 		&endDateTime=
-			${end}
+			${start.date2}
 		&size=10&page=1&sort=date,asc&city=${selectedCity}
 		`;
     try {
       const response = await fetch(baseURL);
       const data = await response.json();
       const results = data._embedded.events.map((data) => {
+        // console.log(Object.keys(data));
+        // console.log(data.dates);
         return {
           url: data.url,
           name: data.name,
@@ -78,6 +98,7 @@ const Events = () => {
         };
       });
       setEvents(results);
+      setSelectedCity("");
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +124,10 @@ const Events = () => {
           <Text variant="titleSmall">{`Address: ${address}`}</Text>
           <Text variant="titleSmall">{`Post Code: ${post_code}`}</Text>
         </Card.Content>
-        <Card.Cover style={{ padding: 3 }} source={{ uri: `${image}` }} />
+        <Card.Cover
+          style={{ padding: 10, backgroundColor: "none" }}
+          source={{ uri: `${image}` }}
+        />
         <Card.Actions>
           <Button
             icon="open-in-new"
@@ -135,61 +159,59 @@ const Events = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{ alignItems: "center" }}>
-        <Text variant="titleLarge">Events</Text>
-      </View>
-
-      <TextInput
-        label="Enter City"
-        value={selectedCity}
-        onChangeText={(text) => setSelectedCity(text)}
-      />
-      <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-        <Button
-          style={{ marginTop: 10 }}
-          mode="contained"
-          onPress={() => showMode("date")}
-        >
-          Start Date
-        </Button>
-        <Button
-          style={{ marginTop: 10 }}
-          mode="contained"
-          onPress={() => showMode1("date")}
-        >
-          End Date
-        </Button>
-        <Button
-          style={{ marginTop: 10 }}
-          mode="contained"
-          onPress={() => handleClick()}
-        >
-          GET LUCKY
-        </Button>
-        <View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              onChange={onChange}
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ paddingHorizontal: 10 }}>
+          <View style={{ alignItems: "center" }}>
+            <Text variant="titleLarge">Events</Text>
+          </View>
+          <View>
+            <TextInput
+              label="Enter City"
+              value={selectedCity}
+              onChangeText={(text) => setSelectedCity(text)}
             />
-          )}
-        </View>
+          </View>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-evenly" }}
+          >
+            <Button
+              style={{ marginTop: 10, width: "50%", marginRight: 5 }}
+              mode="contained"
+              onPress={() => showMode("date")}
+            >
+              Select Date
+            </Button>
 
-        <View>
-          {show1 && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={endDate}
-              mode={mode1}
-              is24Hour={true}
-              onChange={onChange1}
-            />
-          )}
+            <Button
+              style={{ marginTop: 10, width: "50%", marginLeft: 5 }}
+              mode="contained"
+              onPress={() => handleClick()}
+            >
+              Search
+            </Button>
+
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                onChange={onChange}
+              />
+            )}
+
+            {show1 && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={endDate}
+                mode={mode1}
+                is24Hour={true}
+                onChange={onChange1}
+              />
+            )}
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
       <SafeAreaView style={styles.container}>
         <FlatList
           data={events}
@@ -204,7 +226,7 @@ const Events = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
+    padding: 6,
   },
 });
 

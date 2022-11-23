@@ -1,129 +1,76 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import { useAuthentication } from "../../utils/hooks/userAuthentication";
 import { Button } from "react-native-paper";
 import { getAuth, signOut } from "firebase/auth";
-import Slideshow from "react-native-image-slider-show";
 
 const auth = getAuth();
 
 const user = auth.currentUser;
-if (user !== null) {
-	console.log(user.uid);
-	console.log(user.displayName);
-	console.log(user.email);
-}
-
-const dataSource = [
-	{
-		caption:
-			"Are you planning a trip sometime soon? With a travel journal you'll have a permanent record of what you saw, who you met, and what emotions you were feeling during each step of the journey.",
-		url: "https://images.pexels.com/photos/2325446/pexels-photo-2325446.jpeg",
-	},
-	{
-		caption:
-			"Remember that happiness is a way of travel, not a destination.",
-		url: "https://images.pexels.com/photos/2356045/pexels-photo-2356045.jpeg?auto=compress&cs=tinysrgb&w=1600",
-	},
-	{
-		caption:
-			"The world is a book and those who do not travel read only one page.",
-		url: "https://images.pexels.com/photos/1591373/pexels-photo-1591373.jpeg?auto=compress&cs=tinysrgb&w=1600",
-	},
-	{
-		caption:
-			"The world is a book and those who do not travel read only one page.",
-		url: "https://images.pexels.com/photos/2662116/pexels-photo-2662116.jpeg?auto=compress&cs=tinysrgb&w=1600",
-	},
-	{
-		caption:
-			"The world is a book and those who do not travel read only one page.",
-		url: "https://images.pexels.com/photos/4825701/pexels-photo-4825701.jpeg?auto=compress&cs=tinysrgb&w=1600",
-	},
-	{
-		caption:
-			"The world is a book and those who do not travel read only one page.",
-		url: "https://images.pexels.com/photos/3225528/pexels-photo-3225528.jpeg?auto=compress&cs=tinysrgb&w=1600",
-	},
-	{
-		caption:
-			"The world is a book and those who do not travel read only one page.",
-		url: "https://images.pexels.com/photos/4388167/pexels-photo-4388167.jpeg?auto=compress&cs=tinysrgb&w=1600",
-	},
-	{
-		caption:
-			"The world is a book and those who do not travel read only one page.",
-		url: "https://images.pexels.com/photos/1457812/pexels-photo-1457812.jpeg?auto=compress&cs=tinysrgb&w=1600",
-	},
-	{
-		caption:
-			"The world is a book and those who do not travel read only one page.",
-		url: "https://images.pexels.com/photos/2914152/pexels-photo-2914152.jpeg?auto=compress&cs=tinysrgb&w=1600",
-	},
-];
 
 export default function HomeScreen() {
-	const [position, setPosition] = useState(0);
+  const { user } = useAuthentication();
+  const [signOutIsLoadingBtn, setSignOutIsLoadingBtn] = useState(false);
 
-	const { user } = useAuthentication();
-	const [signOutIsLoadingBtn, setSignOutIsLoadingBtn] = useState(false);
+  const image = {
+    uri: "https://images.unsplash.com/photo-1501868984184-76121ed6a6e2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2970&q=80",
+  };
 
-	function signOutBtnFuncCombine() {
-		setSignOutIsLoadingBtn(true);
-		signOut(auth);
-	}
+  // function signOutBtnFuncCombine() {
+  //   setSignOutIsLoadingBtn(true);
+  //   signOut(auth);
+  // }
 
-	useEffect(() => {
-		const toggle = setInterval(() => {
-			setPosition(position === dataSource.length - 1 ? 0 : position + 1);
-		}, 6000);
+  return (
+    <View style={styles.container}>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <View style={{ flex: 1, marginTop: 390, padding: 5 }}>
+          <Text
+            style={{
+              // marginTop: ,
+              fontSize: 25,
+              fontWeight: "600",
+              // alignSelf: "center",
+              // marginHorizontal: 10,
+              textAlign: "center",
+              color: "white",
+              backgroundColor: "rgba(0,0,0,0.7)",
+              borderRadius: 25,
+            }}
+          >
+            Welcome {user?.displayName}! Are you planning a trip sometime soon?
+            With a travel journal you'll have a permanent record of what you
+            saw, who you met, and what emotions you were feeling during each
+            step of the journey.
+          </Text>
+        </View>
+      </ImageBackground>
 
-		return () => clearInterval(toggle);
-	});
-
-	return (
-		<View style={styles.container}>
-			<View>
-				<Slideshow
-					position={position}
-					dataSource={dataSource}
-					captionStyle={styles.captionStyle}
-					titleStyle={styles.titleStyle}
-					height={450}
-				/>
-			</View>
-			<Text>Welcome {user?.displayName}!</Text>
-
-			<Button
-				style={styles.button}
-				onPress={() => signOutBtnFuncCombine()}
-				icon="arrow-right"
-				mode="contained"
-				contentStyle={{ height: 50, flexDirection: "row-reverse" }}
-				loading={signOutIsLoadingBtn}
-			>
-				Sign Out
-			</Button>
-		</View>
-	);
+      {/* <Button
+        style={styles.button}
+        onPress={() => signOutBtnFuncCombine()}
+        icon="arrow-right"
+        mode="contained"
+        contentStyle={{ height: 50, flexDirection: "row-reverse" }}
+        loading={signOutIsLoadingBtn}
+      >
+        Sign Out
+      </Button> */}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	button: {
-		marginTop: 10,
-	},
-	captionStyle: {
-		color: "white",
-    fontSize: 25,
-    textAlign: "center"
-	},
-	slideContainer: {
-		minHeight: 20,
-	},
+  container: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  image: {
+    flex: 1,
+    justifyContent: "center",
+    opacity: 0.9,
+    elevation: 5,
+
+    resizeMode: "cover",
+  },
 });
