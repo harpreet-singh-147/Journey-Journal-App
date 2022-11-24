@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Modal,
-  FlatList,
-  TouchableOpacity,
-  VirtualizedList,
-} from "react-native";
+import { View, StyleSheet, Modal, FlatList } from "react-native";
 import useCollection from "../../utils/hooks/useCollection";
 import { useNavigation } from "@react-navigation/native";
 import { Button, Card, Title, Paragraph } from "react-native-paper";

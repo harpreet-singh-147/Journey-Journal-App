@@ -16,16 +16,16 @@ import useCollection from "../../utils/hooks/useCollection";
 import { useNavigation } from "@react-navigation/native";
 
 const addDetailsValidationSchema = yup.object({
-  name: yup.string().required(),
-  description: yup.string().required().max(200),
+  name: yup.string().required("Please enter a name"),
+  description: yup.string().max(200),
   rating: yup
     .string()
-    .required()
+    .required("Please enter a rating")
     .test("is-num-1-5", "Rating must be a number between 1 - 5", (val) => {
       return parseInt(val) < 6 && parseInt(val) > 0;
     }),
-  address: yup.string().required(),
-  city: yup.string().required(),
+  address: yup.string().required("Please enter an address"),
+  city: yup.string().required("Please enter a city"),
 });
 
 export default function UpdateJourneyDetails({ route }) {
@@ -88,7 +88,7 @@ export default function UpdateJourneyDetails({ route }) {
             {(props) => (
               <View>
                 <TextInput
-                  placeholder="name"
+                  placeholder="Name"
                   onChangeText={props.handleChange("name")}
                   value={props.values.name}
                   onBlur={props.handleBlur("name")}
@@ -97,7 +97,7 @@ export default function UpdateJourneyDetails({ route }) {
                   {props.touched.name && props.errors.name}
                 </Text>
                 <TextInput
-                  placeholder="city"
+                  placeholder="City"
                   onChangeText={props.handleChange("city")}
                   value={props.values.city}
                   onBlur={props.handleBlur("city")}
@@ -106,7 +106,7 @@ export default function UpdateJourneyDetails({ route }) {
                   {props.touched.city && props.errors.city}
                 </Text>
                 <TextInput
-                  placeholder="address"
+                  placeholder="Address"
                   onChangeText={props.handleChange("address")}
                   value={props.values.address}
                   onBlur={props.handleBlur("address")}
@@ -116,7 +116,7 @@ export default function UpdateJourneyDetails({ route }) {
                 </Text>
                 <TextInput
                   multiline
-                  placeholder="description"
+                  placeholder="Description"
                   onChangeText={props.handleChange("description")}
                   value={props.values.description}
                   onBlur={props.handleBlur("description")}
@@ -126,7 +126,7 @@ export default function UpdateJourneyDetails({ route }) {
                 </Text>
                 <TextInput
                   keyboardType="numeric"
-                  placeholder="rating (1-5)"
+                  placeholder="Rating (1-5)"
                   onChangeText={props.handleChange("rating")}
                   value={props.values.rating}
                   onBlur={props.handleBlur("rating")}

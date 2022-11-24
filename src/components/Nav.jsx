@@ -12,15 +12,15 @@ const Nav = () => {
   const [routes] = React.useState([
     {
       key: "home",
-      title: "HomePage",
+      title: "Home",
       focusedIcon: "home",
       unfocusedIcon: "home",
     },
-    { key: "addTrip", title: "AddTrip", focusedIcon: "airplane-plus" },
-    { key: "tripList", title: "TripsList", focusedIcon: "bag-suitcase" },
+    { key: "addTrip", title: "Add Trip", focusedIcon: "airplane-plus" },
+    { key: "tripList", title: "Trips", focusedIcon: "bag-suitcase" },
     {
       key: "recommendations",
-      title: "Recommendations",
+      title: "Suggestions",
       focusedIcon: "map-marker-star-outline",
       unfocusedIcon: "map-marker-star-outline",
     },

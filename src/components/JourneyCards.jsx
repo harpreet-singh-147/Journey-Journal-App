@@ -75,7 +75,7 @@ const JourneyCards = ({ navigation }) => {
           <Title>{city}</Title>
           <Paragraph>{title}</Paragraph>
           <Paragraph>
-            {new Date(date * 1000).toDateString()} -
+            {new Date(date * 1000).toDateString()} -{" "}
             {new Date(endDate * 1000).toDateString()}
           </Paragraph>
 

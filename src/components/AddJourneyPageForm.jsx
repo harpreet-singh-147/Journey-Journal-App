@@ -17,8 +17,8 @@ import * as yup from "yup";
 import { useNavigation } from "@react-navigation/native";
 
 const addJourneyValidationSchema = yup.object({
-  journey_title: yup.string().required("please enter a journey"),
-  city: yup.string().required("please enter a city"),
+  journey_title: yup.string().required("Please enter a journey"),
+  city: yup.string().required("Please enter a city"),
 });
 
 const AddJourneyPageForm = () => {
@@ -155,23 +155,11 @@ const AddJourneyPageForm = () => {
 };
 export default AddJourneyPageForm;
 const styles = StyleSheet.create({
-  container: {
-    // padding: 20,
-    // // marginTop: 50,
-    // flex: 1,
-    // backgroundColor: "gray",
-  },
   errorText: {
     color: "crimson",
     fontWeight: "bold",
     marginBottom: 6,
     marginTop: 6,
     textAlign: "center",
-  },
-  date: {
-    // backgroundColor: "red",
-    // margin: 20,
-    // padding: 20,
-    // alignItems: "center",
   },
 });

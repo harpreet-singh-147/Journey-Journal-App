@@ -24,7 +24,7 @@ export default function HomeScreen() {
         <View style={{ flex: 1, marginTop: 470, padding: 5 }}>
           <Text
             style={{
-              fontSize: 17,
+              fontSize: 15,
               fontWeight: "600",
               textAlign: "center",
               color: "#E7F6F2",
