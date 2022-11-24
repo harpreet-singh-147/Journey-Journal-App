@@ -8,16 +8,8 @@ import { fetchPlaces } from "../../utils/api";
 import { Button } from "react-native-paper";
 
 function RecommendationsMap({ placeId, category, locationLonLat }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [currLocation, setCurrLocationRegion] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [locationDataJSON, setLocationDataJSON] = useState({
-    locationsData: [],
-  });
-
   const [markers, setMarkers] = useState([]);
   const [region, setRegion] = useState({});
-
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -33,9 +25,7 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
 
   function fetchLocationClick() {
     if (category && placeId) {
-      setLocationDataJSON({ locationsData: [] });
       fetchPlaces(placeId, category).then(({ features }) => {
-        setLocationDataJSON({ locationsData: features });
         let markerInfo = [];
         features.map((feature, index) => {
           markerInfo.push({
@@ -45,6 +35,7 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
               longitude: feature.geometry.coordinates[0],
               latitude: feature.geometry.coordinates[1],
             },
+            addressFormatted: feature.properties.formatted,
           });
         });
         setMarkers(markerInfo);
@@ -59,7 +50,11 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
   // };
   return (
     <View style={styles.mapContainer}>
-      <Button mode="contained" style={styles.button} onPress={fetchLocationClick}>
+      <Button
+        mode="contained"
+        style={styles.button}
+        onPress={fetchLocationClick}
+      >
         Search
       </Button>
       <MapView
@@ -82,8 +77,15 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
             title={marker.title}
             key={index}
             coordinate={marker.coordinates}
-            description={category}
-          />
+            description={marker.addressFormatted}
+          >
+            <Callout tooltip={true} style={styles.callout}>
+              <View>
+                <Text style={styles.title}>{marker.title}</Text>
+                <Text style={styles.description}>{marker.addressFormatted}</Text>
+              </View>
+            </Callout>
+          </Marker>
         ))}
       </MapView>
     </View>
@@ -92,17 +94,34 @@ function RecommendationsMap({ placeId, category, locationLonLat }) {
 
 const styles = StyleSheet.create({
   mapContainer: {
-    // flex: 1,
     height: "100%",
   },
   map: {
-    // width: "100%",
     height: 300,
   },
   button: {
     alignSelf: "center",
     marginVertical: 10,
-  }
+  },
+  callout: {
+    backgroundColor: "white",
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 4,
+  },
+  title: {
+    color: "black",
+    fontSize: 14,
+    lineHeight: 18,
+    flex: 1,
+  },
+  description: {
+    color: "#707070",
+    fontSize: 12,
+    lineHeight: 16,
+    flex: 1,
+  },
 });
 
 export default RecommendationsMap;
