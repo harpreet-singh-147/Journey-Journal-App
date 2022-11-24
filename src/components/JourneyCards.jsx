@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
     alignItems: "center",
+    backgroundColor: "",
   },
 
   button: {

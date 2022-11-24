@@ -26,7 +26,7 @@ const Events = () => {
   const formatDate = (date) => {
     const formatted = date.toISOString().substring(0, 10);
     const dateObj = {
-      date1: formatted + "T00:00:00Z",
+      date1: formatted + "T01:00:00Z",
       date2: formatted + "T23:59:59Z",
     };
     return dateObj;

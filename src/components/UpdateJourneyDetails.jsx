@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Formik } from "formik";
@@ -75,97 +76,99 @@ export default function UpdateJourneyDetails({ route }) {
 
   return (
     <View>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ padding: 25 }}>
-          <Formik
-            initialValues={formData}
-            enableReinitialize
-            validationSchema={addDetailsValidationSchema}
-            onSubmit={(values) => {
-              updateDetails(values);
-            }}
-          >
-            {(props) => (
-              <View>
-                <TextInput
-                  placeholder="Name"
-                  onChangeText={props.handleChange("name")}
-                  value={props.values.name}
-                  onBlur={props.handleBlur("name")}
-                />
-                <Text style={styles.errorText}>
-                  {props.touched.name && props.errors.name}
-                </Text>
-                <TextInput
-                  placeholder="City"
-                  onChangeText={props.handleChange("city")}
-                  value={props.values.city}
-                  onBlur={props.handleBlur("city")}
-                />
-                <Text style={styles.errorText}>
-                  {props.touched.city && props.errors.city}
-                </Text>
-                <TextInput
-                  placeholder="Address"
-                  onChangeText={props.handleChange("address")}
-                  value={props.values.address}
-                  onBlur={props.handleBlur("address")}
-                />
-                <Text style={styles.errorText}>
-                  {props.touched.address && props.errors.address}
-                </Text>
-                <TextInput
-                  multiline
-                  placeholder="Description"
-                  onChangeText={props.handleChange("description")}
-                  value={props.values.description}
-                  onBlur={props.handleBlur("description")}
-                />
-                <Text style={styles.errorText}>
-                  {props.touched.description && props.errors.description}
-                </Text>
-                <TextInput
-                  keyboardType="numeric"
-                  placeholder="Rating (1-5)"
-                  onChangeText={props.handleChange("rating")}
-                  value={props.values.rating}
-                  onBlur={props.handleBlur("rating")}
-                />
-                <Text style={styles.errorText}>
-                  {props.touched.rating && props.errors.rating}
-                </Text>
+      <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={{ padding: 25 }}>
+            <Formik
+              initialValues={formData}
+              enableReinitialize
+              validationSchema={addDetailsValidationSchema}
+              onSubmit={(values) => {
+                updateDetails(values);
+              }}
+            >
+              {(props) => (
                 <View>
+                  <TextInput
+                    placeholder="Name"
+                    onChangeText={props.handleChange("name")}
+                    value={props.values.name}
+                    onBlur={props.handleBlur("name")}
+                  />
+                  <Text style={styles.errorText}>
+                    {props.touched.name && props.errors.name}
+                  </Text>
+                  <TextInput
+                    placeholder="City"
+                    onChangeText={props.handleChange("city")}
+                    value={props.values.city}
+                    onBlur={props.handleBlur("city")}
+                  />
+                  <Text style={styles.errorText}>
+                    {props.touched.city && props.errors.city}
+                  </Text>
+                  <TextInput
+                    placeholder="Address"
+                    onChangeText={props.handleChange("address")}
+                    value={props.values.address}
+                    onBlur={props.handleBlur("address")}
+                  />
+                  <Text style={styles.errorText}>
+                    {props.touched.address && props.errors.address}
+                  </Text>
+                  <TextInput
+                    multiline
+                    placeholder="Description"
+                    onChangeText={props.handleChange("description")}
+                    value={props.values.description}
+                    onBlur={props.handleBlur("description")}
+                  />
+                  <Text style={styles.errorText}>
+                    {props.touched.description && props.errors.description}
+                  </Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    placeholder="Rating (1-5)"
+                    onChangeText={props.handleChange("rating")}
+                    value={props.values.rating}
+                    onBlur={props.handleBlur("rating")}
+                  />
+                  <Text style={styles.errorText}>
+                    {props.touched.rating && props.errors.rating}
+                  </Text>
+                  <View>
+                    <Button
+                      style={{ marginTop: 10 }}
+                      mode="contained"
+                      onPress={() => showMode("date")}
+                    >
+                      Select Date
+                    </Button>
+                  </View>
+                  <View>
+                    {show && (
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={mode}
+                        is24Hour={true}
+                        onChange={onChange}
+                      />
+                    )}
+                  </View>
                   <Button
                     style={{ marginTop: 10 }}
                     mode="contained"
-                    onPress={() => showMode("date")}
+                    onPress={props.handleSubmit}
                   >
-                    Select Date
+                    Submit
                   </Button>
                 </View>
-                <View>
-                  {show && (
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      value={date}
-                      mode={mode}
-                      is24Hour={true}
-                      onChange={onChange}
-                    />
-                  )}
-                </View>
-                <Button
-                  style={{ marginTop: 10 }}
-                  mode="contained"
-                  onPress={props.handleSubmit}
-                >
-                  Submit
-                </Button>
-              </View>
-            )}
-          </Formik>
-        </View>
-      </TouchableWithoutFeedback>
+              )}
+            </Formik>
+          </View>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </View>
   );
 }
